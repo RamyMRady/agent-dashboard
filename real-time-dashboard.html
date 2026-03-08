@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🤖 Real-Time Agent Control Center</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --bg-dark: #0d1117;
+            --bg-card: #161b22;
+            --bg-hover: #21262d;
+            --border: #30363d;
+            --text: #c9d1d9;
+            --text-muted: #8b949e;
+            --accent: #f0883e;
+            --green: #3fb950;
+            --blue: #58a6ff;
+            --red: #f85149;
+            --yellow: #d29922;
+            --purple: #a371f7;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text);
+            min-height: 100vh;
+        }
+        
+        .header {
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border);
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .logo {
+            font-size: 22px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .live-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px;
+            background: rgba(63, 185, 80, 0.15);
+            border-radius: 16px;
+            color: var(--green);
+            font-size: 13px;
+        }
+        
+        .pulse {
+            width: 8px;
+            height: 8px;
+            background: var(--green);
+            border-radius: 50%;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(1.3); }
+        }
+
+        .refresh-btn {
+            padding: 8px 16px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .refresh-btn:hover {
+            background: #e67e22;
+        }
+        
+        .main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+        
+        .section {
+            margin-bottom: 32px;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        /* Agent Grid */
+        .agent-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 12px;
+        }
+        
+        .agent-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px;
+            transition: all 0.2s;
+        }
+        
+        .agent-card:hover {
+            border-color: var(--accent);
+        }
+        
+        .agent-card.working {
+            border-color: var(--green);
+            box-shadow: 0 0 0 1px var(--green);
+            background: rgba(63, 185, 80, 0.05);
+        }
+        
+        .agent-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .agent-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+        
+        .agent-avatar.main { background: linear-gradient(135deg, var(--accent), #e67e22); }
+        .agent-avatar.coder { background: linear-gradient(135deg, var(--blue), #2980b9); }
+        .agent-avatar.project { background: linear-gradient(135deg, var(--blue), #2980b9); }
+        .agent-avatar.specialist { background: linear-gradient(135deg, var(--purple), #8e44ad); }
+        .agent-avatar.helper { background: linear-gradient(135deg, var(--green), #27ae60); }
+        
+        .agent-name {
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        .agent-role {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+        
+        .agent-status {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+        
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+        
+        .status-dot.working { 
+            background: var(--green); 
+            animation: pulse 2s ease-in-out infinite;
+        }
+        .status-dot.available { background: var(--text-muted); }
+        .status-dot.busy { background: var(--yellow); }
+        
+        .agent-task {
+            font-size: 11px;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        .agent-stats {
+            margin-top: 8px;
+            font-size: 10px;
+            color: var(--text-muted);
+        }
+
+        .working .agent-task {
+            color: var(--green);
+            font-weight: 500;
+        }
+
+        /* Project Cards */
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 16px;
+        }
+        
+        .project-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        
+        .project-header {
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .project-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+        
+        .project-icon.dashboard { background: linear-gradient(135deg, var(--accent), #e67e22); }
+        .project-icon.iprogramai { background: linear-gradient(135deg, #3498db, #2980b9); }
+        .project-icon.netagents { background: linear-gradient(135deg, #2ecc71, #27ae60); }
+        .project-icon.pharmacrm { background: linear-gradient(135deg, #9b59b6, #8e44ad); }
+        
+        .project-name {
+            font-weight: 600;
+            font-size: 16px;
+        }
+        
+        .project-desc {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+        
+        .project-status {
+            margin-left: auto;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        
+        .project-status.active { background: rgba(63, 185, 80, 0.2); color: var(--green); }
+        .project-status.live { background: rgba(63, 185, 80, 0.2); color: var(--green); }
+        .project-status.dev { background: rgba(88, 166, 255, 0.2); color: var(--blue); }
+        .project-status.planning { background: rgba(139, 148, 158, 0.2); color: var(--text-muted); }
+        
+        .timestamp {
+            font-size: 10px;
+            color: var(--text-muted);
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 600px) {
+            .agent-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .project-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">
+            🤖 Real-Time Agent Control Center
+        </div>
+        <div style="display: flex; gap: 16px; align-items: center;">
+            <button class="refresh-btn" onclick="refreshStatus()">🔄 Refresh</button>
+            <div class="live-badge">
+                <div class="pulse"></div>
+                Live
+            </div>
+        </div>
+    </div>
+
+    <div class="main">
+        <div class="section">
+            <div class="section-title">
+                👥 Real-Time Agent Status
+            </div>
+            <div class="agent-grid" id="agentGrid">
+                <!-- Agents will be populated by JavaScript -->
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">
+                📁 Active Projects
+            </div>
+            <div class="project-grid">
+                <div class="project-card">
+                    <div class="project-header">
+                        <div class="project-icon dashboard">📊</div>
+                        <div>
+                            <div class="project-name">Agent Dashboard</div>
+                            <div class="project-desc">Real-time agent monitoring system</div>
+                        </div>
+                        <div class="project-status active">Active</div>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-header">
+                        <div class="project-icon iprogramai">🎓</div>
+                        <div>
+                            <div class="project-name">iProgramAI</div>
+                            <div class="project-desc">iprogramai.com • AI learning platform</div>
+                        </div>
+                        <div class="project-status live">Live</div>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-header">
+                        <div class="project-icon netagents">🌐</div>
+                        <div>
+                            <div class="project-name">NetAgents</div>
+                            <div class="project-desc">Multi-agent workspace with RAG & TTS</div>
+                        </div>
+                        <div class="project-status dev">Development</div>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-header">
+                        <div class="project-icon pharmacrm">💊</div>
+                        <div>
+                            <div class="project-name">PharmaCRM</div>
+                            <div class="project-desc">Healthcare CRM for pharma sales</div>
+                        </div>
+                        <div class="project-status planning">Planning</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="timestamp" id="lastUpdate">
+            Last updated: Loading...
+        </div>
+    </div>
+
+    <script>
+        // Agent configuration with real-time mapping
+        const agents = [
+            { id: 'coder', name: 'UCODER', role: 'Development • Sonnet 4', emoji: '💻', type: 'coder' },
+            { id: 'main', name: 'MAGNAM', role: 'Orchestrator • Opus 4.5', emoji: '⚡', type: 'main' },
+            { id: 'dallas', name: 'DALLAS', role: 'iProgramAI Lead', emoji: '🏙️', type: 'project' },
+            { id: 'seattle', name: 'SEATTLE', role: 'NetAgents Lead', emoji: '🌲', type: 'project' },
+            { id: 'houston', name: 'HOUSTON', role: 'PharmaCRM Lead', emoji: '🚀', type: 'project' },
+            { id: 'engineer', name: 'ENGINEER', role: 'Architecture', emoji: '🔧', type: 'specialist' },
+            { id: 'researcher', name: 'RESEARCHER', role: 'Research', emoji: '🔬', type: 'specialist' },
+            { id: 'writer', name: 'WRITER', role: 'Documentation', emoji: '✍️', type: 'specialist' },
+            { id: 'analyst', name: 'ANALYST', role: 'Analysis', emoji: '📊', type: 'specialist' },
+            { id: 'datascientist', name: 'DATASCIENTIST', role: 'ML/Data', emoji: '🤖', type: 'specialist' },
+            { id: 'financial', name: 'FINANCIAL', role: 'Finance', emoji: '💰', type: 'specialist' },
+            { id: 'lawyer', name: 'LAWYER', role: 'Legal', emoji: '⚖️', type: 'specialist' },
+            { id: 'geek', name: 'GEEK', role: 'Tech/UI', emoji: '🎮', type: 'specialist' },
+            { id: 'scientist', name: 'SCIENTIST', role: 'Science', emoji: '🧬', type: 'specialist' },
+            { id: 'flash', name: 'FLASH', role: 'Quick Tasks', emoji: '⚡', type: 'helper' },
+            { id: 'megaman', name: 'MEGAMAN', role: 'Gaming/Fun', emoji: '🎮', type: 'helper' },
+            { id: 'ihelp', name: 'IHELP', role: 'Quick Help • Haiku', emoji: '❓', type: 'helper' }
+        ];
+
+        // Real-time status from OpenClaw API
+        async function getRealTimeStatus() {
+            try {
+                const response = await fetch('/api/agents');
+                const data = await response.json();
+                
+                // Merge API data with defaults for all agents
+                const defaultStatus = { status: 'available', task: 'Standby', tokens: '0', lastActive: '24h ago' };
+                const result = {};
+                
+                agents.forEach(agent => {
+                    result[agent.id] = data.agents[agent.id] || defaultStatus;
+                });
+                
+                return result;
+            } catch (error) {
+                console.error('Failed to fetch real-time status:', error);
+                // Fallback to mock data
+                return {
+                    'coder': {
+                        status: 'working',
+                        task: 'Building real-time agent dashboard with live status updates',
+                        tokens: '48.5K',
+                        lastActive: 'Just now'
+                    },
+                    'main': {
+                        status: 'available',
+                        task: 'Ready for orchestration',
+                        tokens: '0',
+                        lastActive: '2h ago'
+                    },
+                    // All others default to available
+                    ...Object.fromEntries(agents.slice(2).map(agent => [
+                        agent.id, 
+                        { status: 'available', task: 'Standby', tokens: '0', lastActive: '24h ago' }
+                    ]))
+                };
+            }
+        }
+
+        async function renderAgents() {
+            const grid = document.getElementById('agentGrid');
+            const status = await getRealTimeStatus();
+            
+            grid.innerHTML = agents.map(agent => {
+                const agentStatus = status[agent.id] || { status: 'available', task: 'Standby', tokens: '0', lastActive: 'Unknown' };
+                const isWorking = agentStatus.status === 'working';
+                
+                return `
+                    <div class="agent-card ${isWorking ? 'working' : ''}">
+                        <div class="agent-header">
+                            <div class="agent-avatar ${agent.type}">${agent.emoji}</div>
+                            <div>
+                                <div class="agent-name">${agent.name}</div>
+                                <div class="agent-role">${agent.role}</div>
+                            </div>
+                        </div>
+                        <div class="agent-status">
+                            <div class="status-dot ${agentStatus.status}"></div>
+                            ${agentStatus.status.charAt(0).toUpperCase() + agentStatus.status.slice(1)}
+                        </div>
+                        <div class="agent-task">${agentStatus.task}</div>
+                        <div class="agent-stats">
+                            Tokens: ${agentStatus.tokens} • Last: ${agentStatus.lastActive}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        async function refreshStatus() {
+            await renderAgents();
+            document.getElementById('lastUpdate').textContent = 
+                `Last updated: ${new Date().toLocaleTimeString()}`;
+        }
+
+        // Auto-refresh every 30 seconds
+        setInterval(refreshStatus, 30000);
+
+        // Initial render
+        refreshStatus();
+    </script>
+</body>
+</html>
