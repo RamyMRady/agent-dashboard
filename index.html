@@ -17,7 +17,8 @@
             --accent: #f0883e;
             --green: #3fb950;
             --blue: #58a6ff;
-            --purple: #a371f7;
+            --red: #f85149;
+            --yellow: #d29922;
         }
         
         body {
@@ -27,7 +28,6 @@
             min-height: 100vh;
         }
         
-        /* Header */
         .header {
             background: var(--bg-card);
             border-bottom: 1px solid var(--border);
@@ -69,14 +69,12 @@
             50% { opacity: 0.5; }
         }
         
-        /* Main */
         .main {
             max-width: 1000px;
             margin: 0 auto;
             padding: 32px 24px;
         }
         
-        /* Section */
         .section {
             margin-bottom: 40px;
         }
@@ -85,9 +83,6 @@
             font-size: 22px;
             font-weight: 700;
             margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
         }
         
         /* Agent Card */
@@ -133,7 +128,7 @@
             background: var(--bg-card);
             border: 1px solid var(--border);
             border-radius: 16px;
-            margin-bottom: 20px;
+            margin-bottom: 24px;
             overflow: hidden;
         }
         
@@ -193,6 +188,11 @@
             text-transform: uppercase;
             letter-spacing: 1px;
             margin-bottom: 12px;
+            margin-top: 20px;
+        }
+        
+        .project-label:first-child {
+            margin-top: 0;
         }
         
         .assigned-agent {
@@ -202,7 +202,6 @@
             padding: 14px 16px;
             background: var(--bg-dark);
             border-radius: 10px;
-            margin-bottom: 16px;
         }
         
         .assigned-agent-avatar {
@@ -226,18 +225,82 @@
             color: var(--text-muted);
         }
         
-        .tech-stack {
+        /* Task List */
+        .task-list {
             display: flex;
-            flex-wrap: wrap;
+            flex-direction: column;
             gap: 8px;
         }
         
-        .tech-tag {
-            padding: 6px 12px;
+        .task-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px 14px;
             background: var(--bg-dark);
-            border-radius: 6px;
+            border-radius: 8px;
+            border-left: 3px solid transparent;
+        }
+        
+        .task-item.critical {
+            border-left-color: var(--red);
+        }
+        
+        .task-item.medium {
+            border-left-color: var(--yellow);
+        }
+        
+        .task-item.done {
+            border-left-color: var(--green);
+            opacity: 0.7;
+        }
+        
+        .task-icon {
+            font-size: 14px;
+            margin-top: 2px;
+        }
+        
+        .task-content {
+            flex: 1;
+        }
+        
+        .task-title {
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .task-item.done .task-title {
+            text-decoration: line-through;
+            color: var(--text-muted);
+        }
+        
+        .task-detail {
             font-size: 12px;
             color: var(--text-muted);
+            margin-top: 4px;
+        }
+        
+        .task-priority {
+            font-size: 10px;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .task-priority.critical {
+            background: rgba(248, 81, 73, 0.2);
+            color: var(--red);
+        }
+        
+        .task-priority.medium {
+            background: rgba(210, 153, 34, 0.2);
+            color: var(--yellow);
+        }
+        
+        .task-priority.done {
+            background: rgba(63, 185, 80, 0.2);
+            color: var(--green);
         }
         
         @media (max-width: 600px) {
@@ -261,7 +324,6 @@
     </header>
     
     <main class="main">
-        <!-- Agent -->
         <div class="agent-card">
             <div class="agent-avatar">⚡</div>
             <div class="agent-info">
@@ -276,7 +338,6 @@
             </div>
         </div>
         
-        <!-- Projects -->
         <div class="section">
             <div class="section-title">📁 Projects</div>
             
@@ -286,7 +347,7 @@
                     <div class="project-icon iprogramai">🎓</div>
                     <div>
                         <div class="project-name">iProgramAI</div>
-                        <div class="project-desc">AI-powered learning platform</div>
+                        <div class="project-desc">iprogramai.com • AI learning platform</div>
                     </div>
                     <div class="project-status live">Live</div>
                 </div>
@@ -296,15 +357,68 @@
                         <div class="assigned-agent-avatar">⚡</div>
                         <div>
                             <div class="assigned-agent-name">MAGNAM</div>
-                            <div class="assigned-agent-role">Full stack development, UI, deployment</div>
+                            <div class="assigned-agent-role">Full stack • Next.js, Tailwind, Cloudflare Tunnel</div>
                         </div>
                     </div>
-                    <div class="project-label">Tech Stack</div>
-                    <div class="tech-stack">
-                        <span class="tech-tag">Next.js 15</span>
-                        <span class="tech-tag">Tailwind</span>
-                        <span class="tech-tag">shadcn/ui</span>
-                        <span class="tech-tag">Cloudflare Tunnel</span>
+                    
+                    <div class="project-label">Tasks (from code audit)</div>
+                    <div class="task-list">
+                        <div class="task-item critical">
+                            <span class="task-icon">🔴</span>
+                            <div class="task-content">
+                                <div class="task-title">Add GEMINI_API_KEY</div>
+                                <div class="task-detail">.env.local is empty — /learn page won't generate curriculum</div>
+                            </div>
+                            <span class="task-priority critical">Critical</span>
+                        </div>
+                        <div class="task-item critical">
+                            <span class="task-icon">🔴</span>
+                            <div class="task-content">
+                                <div class="task-title">Wire up real AI in Playground</div>
+                                <div class="task-detail">Currently uses hardcoded demoResponses[] — no actual AI calls</div>
+                            </div>
+                            <span class="task-priority critical">Critical</span>
+                        </div>
+                        <div class="task-item critical">
+                            <span class="task-icon">🔴</span>
+                            <div class="task-content">
+                                <div class="task-title">Connect Supabase for user progress</div>
+                                <div class="task-detail">@supabase/supabase-js installed but unused — progress lost on refresh</div>
+                            </div>
+                            <span class="task-priority critical">Critical</span>
+                        </div>
+                        <div class="task-item medium">
+                            <span class="task-icon">🟡</span>
+                            <div class="task-content">
+                                <div class="task-title">Fix email/password login</div>
+                                <div class="task-detail">Shows "coming soon" alert — remove form or implement credentials</div>
+                            </div>
+                            <span class="task-priority medium">Medium</span>
+                        </div>
+                        <div class="task-item medium">
+                            <span class="task-icon">🟡</span>
+                            <div class="task-content">
+                                <div class="task-title">Add Google OAuth</div>
+                                <div class="task-detail">AUTH_GOOGLE_ID not set — only GitHub works currently</div>
+                            </div>
+                            <span class="task-priority medium">Medium</span>
+                        </div>
+                        <div class="task-item medium">
+                            <span class="task-icon">🟡</span>
+                            <div class="task-content">
+                                <div class="task-title">Add auth middleware</div>
+                                <div class="task-detail">/course, /playground, /learn accessible without login</div>
+                            </div>
+                            <span class="task-priority medium">Medium</span>
+                        </div>
+                        <div class="task-item medium">
+                            <span class="task-icon">🟡</span>
+                            <div class="task-content">
+                                <div class="task-title">Replace fake testimonials & stats</div>
+                                <div class="task-detail">"10,000+ students" and reviews are placeholder content</div>
+                            </div>
+                            <span class="task-priority medium">Medium</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -315,7 +429,7 @@
                     <div class="project-icon netagents">🌐</div>
                     <div>
                         <div class="project-name">NetAgents</div>
-                        <div class="project-desc">Multi-agent workspace with RAG & TTS</div>
+                        <div class="project-desc">localhost:3333 • Multi-agent workspace</div>
                     </div>
                     <div class="project-status dev">Development</div>
                 </div>
@@ -325,16 +439,36 @@
                         <div class="assigned-agent-avatar">⚡</div>
                         <div>
                             <div class="assigned-agent-name">MAGNAM</div>
-                            <div class="assigned-agent-role">Server, UI theming, PIN system</div>
+                            <div class="assigned-agent-role">Full stack • Node.js, Express, WebSocket</div>
                         </div>
                     </div>
-                    <div class="project-label">Tech Stack</div>
-                    <div class="tech-stack">
-                        <span class="tech-tag">Node.js</span>
-                        <span class="tech-tag">Express</span>
-                        <span class="tech-tag">WebSocket</span>
-                        <span class="tech-tag">Murf.ai TTS</span>
-                        <span class="tech-tag">RAG</span>
+                    
+                    <div class="project-label">Tasks</div>
+                    <div class="task-list">
+                        <div class="task-item done">
+                            <span class="task-icon">✅</span>
+                            <div class="task-content">
+                                <div class="task-title">PIN recovery system</div>
+                                <div class="task-detail">Completed — recoverPin() reveals PIN when Operator ID entered</div>
+                            </div>
+                            <span class="task-priority done">Done</span>
+                        </div>
+                        <div class="task-item medium">
+                            <span class="task-icon">🟡</span>
+                            <div class="task-content">
+                                <div class="task-title">Deploy to production</div>
+                                <div class="task-detail">Currently localhost only — needs Cloudflare Tunnel or hosting</div>
+                            </div>
+                            <span class="task-priority medium">Medium</span>
+                        </div>
+                        <div class="task-item medium">
+                            <span class="task-icon">🟡</span>
+                            <div class="task-content">
+                                <div class="task-title">RAG pipeline optimization</div>
+                                <div class="task-detail">Document uploads work but retrieval could be faster</div>
+                            </div>
+                            <span class="task-priority medium">Medium</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -355,14 +489,36 @@
                         <div class="assigned-agent-avatar">⚡</div>
                         <div>
                             <div class="assigned-agent-name">MAGNAM</div>
-                            <div class="assigned-agent-role">Design, development, compliance</div>
+                            <div class="assigned-agent-role">Full stack • Next.js, Supabase, Tailwind</div>
                         </div>
                     </div>
-                    <div class="project-label">Tech Stack</div>
-                    <div class="tech-stack">
-                        <span class="tech-tag">Next.js</span>
-                        <span class="tech-tag">Supabase</span>
-                        <span class="tech-tag">Tailwind</span>
+                    
+                    <div class="project-label">Tasks</div>
+                    <div class="task-list">
+                        <div class="task-item critical">
+                            <span class="task-icon">🔴</span>
+                            <div class="task-content">
+                                <div class="task-title">Purchase domain</div>
+                                <div class="task-detail">No domain registered yet — waiting for Boss decision</div>
+                            </div>
+                            <span class="task-priority critical">Blocked</span>
+                        </div>
+                        <div class="task-item critical">
+                            <span class="task-icon">🔴</span>
+                            <div class="task-content">
+                                <div class="task-title">Set up Supabase</div>
+                                <div class="task-detail">Database not configured — needed for user data</div>
+                            </div>
+                            <span class="task-priority critical">Blocked</span>
+                        </div>
+                        <div class="task-item medium">
+                            <span class="task-icon">🟡</span>
+                            <div class="task-content">
+                                <div class="task-title">Finalize pricing tiers</div>
+                                <div class="task-detail">$9/$29/Enterprise proposed — needs approval</div>
+                            </div>
+                            <span class="task-priority medium">Medium</span>
+                        </div>
                     </div>
                 </div>
             </div>
