@@ -1,71 +1,117 @@
-const http = require('http');
-const fs = require('fs');
-const path = require('path');
-const { execSync } = require('child_process');
+import express from 'express';
+import { readFileSync, existsSync, writeFileSync } from 'fs';
+import { join, dirname } from 'path';
+import { fileURLToPath } from 'url';
 
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const app = express();
 const PORT = 5002;
 
-// Get live session status from OpenClaw
-function getSessionStatus() {
-    try {
-        const result = execSync('openclaw sessions list --json 2>/dev/null', { 
-            encoding: 'utf8',
-            timeout: 5000 
-        });
-        return JSON.parse(result);
-    } catch (e) {
-        // Fallback: read from a status file or return mock data
-        return { sessions: [], error: e.message };
-    }
+// Status file path
+const STATUS_FILE = join(__dirname, 'status.json');
+
+// Initialize status file if it doesn't exist
+if (!existsSync(STATUS_FILE)) {
+    writeFileSync(STATUS_FILE, JSON.stringify({
+        agents: [
+            {
+                id: 'magnam',
+                name: 'MAGNAM',
+                emoji: '⚡',
+                model: 'Claude Opus 4.5',
+                status: 'idle',
+                currentTask: null,
+                project: null,
+                lastActivity: Date.now()
+            }
+        ],
+        projects: [
+            {
+                id: 'agent-dashboard',
+                name: 'Agent Dashboard',
+                emoji: '📊',
+                status: 'active',
+                description: 'Real-time agent monitoring'
+            },
+            {
+                id: 'iprogramai',
+                name: 'iProgramAI',
+                emoji: '🎓',
+                status: 'live',
+                description: 'AI learning platform'
+            },
+            {
+                id: 'netagents',
+                name: 'NetAgents',
+                emoji: '🌐',
+                status: 'development',
+                description: 'Multi-agent workspace'
+            },
+            {
+                id: 'pharmacrm',
+                name: 'PharmaCRM',
+                emoji: '💊',
+                status: 'planning',
+                description: 'Healthcare CRM'
+            }
+        ],
+        activity: []
+    }, null, 2));
 }
 
-// Agent definitions
-const AGENTS = {
-    main: { name: 'MAGNAM', emoji: '⚡', role: 'Orchestrator', model: 'Opus 4.5' },
-    dallas: { name: 'DALLAS', emoji: '🏙️', role: 'iProgramAI Lead', model: 'Sonnet 4' },
-    seattle: { name: 'SEATTLE', emoji: '🌲', role: 'NetAgents Lead', model: 'Sonnet 4' },
-    houston: { name: 'HOUSTON', emoji: '🚀', role: 'PharmaCRM Lead', model: 'Sonnet 4' },
-    coder: { name: 'CODER', emoji: '💻', role: 'Development', model: 'Sonnet 4' },
-    engineer: { name: 'ENGINEER', emoji: '🔧', role: 'Architecture', model: 'Sonnet 4' },
-    researcher: { name: 'RESEARCHER', emoji: '🔬', role: 'Research', model: 'Sonnet 4' },
-    writer: { name: 'WRITER', emoji: '✍️', role: 'Documentation', model: 'Sonnet 4' },
-    analyst: { name: 'ANALYST', emoji: '📊', role: 'Analysis', model: 'Sonnet 4' },
-    datascientist: { name: 'DATASCIENTIST', emoji: '🤖', role: 'ML/Data', model: 'Sonnet 4' },
-    scientist: { name: 'SCIENTIST', emoji: '🧪', role: 'Science', model: 'Sonnet 4' },
-    financial: { name: 'FINANCIAL', emoji: '💰', role: 'Finance', model: 'Sonnet 4' },
-    lawyer: { name: 'LAWYER', emoji: '⚖️', role: 'Legal', model: 'Sonnet 4' },
-    geek: { name: 'GEEK', emoji: '🎮', role: 'Tech/UI', model: 'Sonnet 4' },
-    megaman: { name: 'MEGAMAN', emoji: '💪', role: 'Power Tasks', model: 'Sonnet 4' },
-    flash: { name: 'FLASH', emoji: '⚡', role: 'Speed Tasks', model: 'Sonnet 4' },
-    ihelp: { name: 'IHELP', emoji: '❓', role: 'Quick Help', model: 'Haiku 4.5' }
-};
+// Serve static files
+app.use(express.static(__dirname));
 
-const server = http.createServer((req, res) => {
-    if (req.url === '/api/status') {
-        res.writeHead(200, { 
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*'
-        });
-        
-        // Build status from sessions
-        const status = Object.entries(AGENTS).map(([id, agent]) => ({
-            id,
-            ...agent,
-            status: 'idle',
-            lastActivity: null,
-            currentTask: null
-        }));
-        
-        res.end(JSON.stringify({ agents: status, timestamp: Date.now() }));
-    } else if (req.url === '/' || req.url === '/index.html') {
-        res.writeHead(200, { 'Content-Type': 'text/html' });
-        res.end(fs.readFileSync(path.join(__dirname, 'index.html')));
-    } else {
-        res.writeHead(404);
-        res.end('Not found');
+// CORS for local development
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    next();
+});
+
+// Get current status
+app.get('/api/status', (req, res) => {
+    try {
+        const status = JSON.parse(readFileSync(STATUS_FILE, 'utf8'));
+        res.json(status);
+    } catch (e) {
+        res.status(500).json({ error: e.message });
     }
 });
 
-server.listen(PORT, () => {
-    console.log(`🎨 Agent Dashboard running at http://127.0.0.1:${PORT}`);
+// Update agent status (called by MAGNAM)
+app.post('/api/update', express.json(), (req, res) => {
+    try {
+        const status = JSON.parse(readFileSync(STATUS_FILE, 'utf8'));
+        const { agentId, task, project, action } = req.body;
+        
+        const agent = status.agents.find(a => a.id === agentId);
+        if (agent) {
+            agent.status = action === 'complete' ? 'idle' : 'working';
+            agent.currentTask = action === 'complete' ? null : task;
+            agent.project = action === 'complete' ? null : project;
+            agent.lastActivity = Date.now();
+            
+            // Add to activity log
+            status.activity.unshift({
+                agentId,
+                task,
+                project,
+                action,
+                timestamp: Date.now()
+            });
+            
+            // Keep only last 50 activities
+            status.activity = status.activity.slice(0, 50);
+            
+            writeFileSync(STATUS_FILE, JSON.stringify(status, null, 2));
+        }
+        
+        res.json({ success: true });
+    } catch (e) {
+        res.status(500).json({ error: e.message });
+    }
+});
+
+app.listen(PORT, () => {
+    console.log(`📊 Agent Dashboard running at http://127.0.0.1:${PORT}`);
 });

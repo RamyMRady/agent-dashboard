@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MAGNAM - Agent Control Center</title>
+    <title>MAGNAM - Live Agent Dashboard</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
@@ -31,180 +31,194 @@
         .header {
             background: var(--bg-card);
             border-bottom: 1px solid var(--border);
-            padding: 20px 24px;
+            padding: 16px 24px;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
         
         .logo {
-            font-size: 28px;
+            font-size: 24px;
             font-weight: 700;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
         }
         
-        .status-badge {
+        .live-indicator {
             display: flex;
             align-items: center;
             gap: 8px;
-            padding: 8px 16px;
-            background: rgba(63, 185, 80, 0.15);
-            border-radius: 20px;
+            font-size: 13px;
             color: var(--green);
-            font-size: 14px;
         }
         
-        .pulse {
+        .live-dot {
             width: 8px;
             height: 8px;
             background: var(--green);
             border-radius: 50%;
-            animation: pulse 2s ease-in-out infinite;
+            animation: pulse 1.5s ease-in-out infinite;
         }
         
         @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.3); }
         }
         
         .main {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 32px 24px;
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            min-height: calc(100vh - 57px);
         }
         
-        .section {
-            margin-bottom: 40px;
-        }
-        
-        .section-title {
-            font-size: 22px;
-            font-weight: 700;
-            margin-bottom: 20px;
-        }
-        
-        /* Agent Card */
-        .agent-card {
+        /* Sidebar - Agents */
+        .sidebar {
             background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 24px;
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            margin-bottom: 32px;
+            border-right: 1px solid var(--border);
+            padding: 20px;
         }
         
-        .agent-avatar {
-            width: 72px;
-            height: 72px;
-            border-radius: 18px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 36px;
-            background: linear-gradient(135deg, var(--accent), #e67e22);
-        }
-        
-        .agent-info h2 {
-            font-size: 26px;
-            font-weight: 700;
-        }
-        
-        .agent-info p {
-            color: var(--text-muted);
-            font-size: 14px;
-            margin-top: 4px;
-        }
-        
-        .agent-status {
-            margin-left: auto;
-        }
-        
-        /* Project Card */
-        .project-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            margin-bottom: 24px;
-            overflow: hidden;
-        }
-        
-        .project-header {
-            padding: 20px 24px;
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            border-bottom: 1px solid var(--border);
-        }
-        
-        .project-icon {
-            width: 50px;
-            height: 50px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 26px;
-        }
-        
-        .project-icon.iprogramai { background: linear-gradient(135deg, #3498db, #2980b9); }
-        .project-icon.netagents { background: linear-gradient(135deg, #2ecc71, #27ae60); }
-        .project-icon.pharmacrm { background: linear-gradient(135deg, #9b59b6, #8e44ad); }
-        
-        .project-name {
-            font-size: 20px;
-            font-weight: 700;
-        }
-        
-        .project-desc {
-            color: var(--text-muted);
-            font-size: 13px;
-            margin-top: 2px;
-        }
-        
-        .project-status {
-            margin-left: auto;
-            padding: 6px 14px;
-            border-radius: 20px;
+        .sidebar-title {
             font-size: 12px;
-            font-weight: 600;
-        }
-        
-        .project-status.live { background: rgba(63, 185, 80, 0.2); color: var(--green); }
-        .project-status.dev { background: rgba(88, 166, 255, 0.2); color: var(--blue); }
-        .project-status.planning { background: rgba(139, 148, 158, 0.2); color: var(--text-muted); }
-        
-        .project-body {
-            padding: 20px 24px;
-        }
-        
-        .project-label {
-            font-size: 11px;
             font-weight: 600;
             color: var(--text-muted);
             text-transform: uppercase;
             letter-spacing: 1px;
+            margin-bottom: 16px;
+        }
+        
+        .agent-card {
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px;
             margin-bottom: 12px;
-            margin-top: 20px;
         }
         
-        .project-label:first-child {
-            margin-top: 0;
+        .agent-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
         }
         
-        .assigned-agent {
+        .agent-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            background: linear-gradient(135deg, var(--accent), #e67e22);
+        }
+        
+        .agent-name {
+            font-weight: 600;
+            font-size: 16px;
+        }
+        
+        .agent-model {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+        
+        .agent-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 13px;
+        }
+        
+        .agent-status.idle {
+            background: var(--bg-hover);
+            color: var(--text-muted);
+        }
+        
+        .agent-status.working {
+            background: rgba(63, 185, 80, 0.15);
+            color: var(--green);
+        }
+        
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+        }
+        
+        .status-dot.idle {
+            background: var(--text-muted);
+        }
+        
+        .status-dot.working {
+            background: var(--green);
+            animation: pulse 1s infinite;
+        }
+        
+        .agent-task {
+            margin-top: 10px;
+            padding: 10px;
+            background: var(--bg-hover);
+            border-radius: 6px;
+            font-size: 12px;
+        }
+        
+        .agent-task-label {
+            color: var(--text-muted);
+            font-size: 10px;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+        
+        .agent-task-project {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            margin-top: 6px;
+            padding: 3px 8px;
+            background: var(--bg-dark);
+            border-radius: 4px;
+            font-size: 11px;
+            color: var(--blue);
+        }
+        
+        /* Content - Projects */
+        .content {
+            padding: 24px;
+            overflow-y: auto;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+        
+        .project-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        
+        .project-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        
+        .project-header {
+            padding: 16px 20px;
             display: flex;
             align-items: center;
             gap: 14px;
-            padding: 14px 16px;
-            background: var(--bg-dark);
-            border-radius: 10px;
+            border-bottom: 1px solid var(--border);
         }
         
-        .assigned-agent-avatar {
+        .project-icon {
             width: 40px;
             height: 40px;
             border-radius: 10px;
@@ -212,102 +226,156 @@
             align-items: center;
             justify-content: center;
             font-size: 20px;
-            background: linear-gradient(135deg, var(--accent), #e67e22);
         }
         
-        .assigned-agent-name {
+        .project-icon.agent-dashboard { background: linear-gradient(135deg, var(--accent), #e67e22); }
+        .project-icon.iprogramai { background: linear-gradient(135deg, #3498db, #2980b9); }
+        .project-icon.netagents { background: linear-gradient(135deg, #2ecc71, #27ae60); }
+        .project-icon.pharmacrm { background: linear-gradient(135deg, #9b59b6, #8e44ad); }
+        
+        .project-name {
             font-weight: 600;
-            font-size: 15px;
+            font-size: 16px;
         }
         
-        .assigned-agent-role {
+        .project-desc {
             font-size: 12px;
             color: var(--text-muted);
         }
         
-        /* Task List */
-        .task-list {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
+        .project-status {
+            margin-left: auto;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
         }
         
-        .task-item {
+        .project-status.active { background: rgba(63, 185, 80, 0.2); color: var(--green); }
+        .project-status.live { background: rgba(63, 185, 80, 0.2); color: var(--green); }
+        .project-status.development { background: rgba(88, 166, 255, 0.2); color: var(--blue); }
+        .project-status.planning { background: rgba(139, 148, 158, 0.2); color: var(--text-muted); }
+        
+        .project-agents {
+            padding: 16px 20px;
+        }
+        
+        .project-agents-title {
+            font-size: 11px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+        
+        .project-agent-row {
             display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            padding: 12px 14px;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
             background: var(--bg-dark);
             border-radius: 8px;
-            border-left: 3px solid transparent;
+            margin-bottom: 8px;
         }
         
-        .task-item.critical {
-            border-left-color: var(--red);
+        .project-agent-avatar {
+            font-size: 18px;
         }
         
-        .task-item.medium {
-            border-left-color: var(--yellow);
-        }
-        
-        .task-item.done {
-            border-left-color: var(--green);
-            opacity: 0.7;
-        }
-        
-        .task-icon {
-            font-size: 14px;
-            margin-top: 2px;
-        }
-        
-        .task-content {
+        .project-agent-info {
             flex: 1;
         }
         
-        .task-title {
-            font-size: 14px;
+        .project-agent-name {
+            font-size: 13px;
             font-weight: 500;
         }
         
-        .task-item.done .task-title {
-            text-decoration: line-through;
+        .project-agent-task {
+            font-size: 11px;
             color: var(--text-muted);
         }
         
-        .task-detail {
+        .project-agent-status {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+        }
+        
+        .project-agent-status.working { color: var(--green); }
+        .project-agent-status.idle { color: var(--text-muted); }
+        
+        .no-agents {
             font-size: 12px;
             color: var(--text-muted);
-            margin-top: 4px;
+            font-style: italic;
         }
         
-        .task-priority {
-            font-size: 10px;
-            padding: 3px 8px;
-            border-radius: 4px;
-            font-weight: 600;
-            text-transform: uppercase;
+        /* Activity Log */
+        .activity-section {
+            margin-top: 32px;
         }
         
-        .task-priority.critical {
-            background: rgba(248, 81, 73, 0.2);
-            color: var(--red);
+        .activity-log {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            max-height: 300px;
+            overflow-y: auto;
         }
         
-        .task-priority.medium {
-            background: rgba(210, 153, 34, 0.2);
-            color: var(--yellow);
+        .activity-item {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
         
-        .task-priority.done {
-            background: rgba(63, 185, 80, 0.2);
-            color: var(--green);
+        .activity-item:last-child {
+            border-bottom: none;
         }
         
-        @media (max-width: 600px) {
-            .agent-card { flex-direction: column; text-align: center; }
-            .agent-status { margin-left: 0; margin-top: 16px; }
-            .project-header { flex-direction: column; text-align: center; }
-            .project-status { margin-left: 0; margin-top: 12px; }
+        .activity-emoji {
+            font-size: 16px;
+        }
+        
+        .activity-content {
+            flex: 1;
+        }
+        
+        .activity-task {
+            font-size: 13px;
+        }
+        
+        .activity-meta {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+        
+        .activity-time {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+        
+        .empty-activity {
+            padding: 24px;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .main {
+                grid-template-columns: 1fr;
+            }
+            .sidebar {
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+            }
         }
     </style>
 </head>
@@ -317,262 +385,189 @@
             <span>⚡</span>
             <span>MAGNAM</span>
         </div>
-        <div class="status-badge">
-            <div class="pulse"></div>
-            <span>Online</span>
+        <div class="live-indicator">
+            <div class="live-dot"></div>
+            <span>Live</span>
+            <span id="last-update" style="margin-left: 8px; color: var(--text-muted);"></span>
         </div>
     </header>
     
     <main class="main">
-        <div class="agent-card">
-            <div class="agent-avatar">⚡</div>
-            <div class="agent-info">
-                <h2>MAGNAM</h2>
-                <p>Primary AI Assistant • Claude Opus 4.5</p>
-            </div>
-            <div class="agent-status">
-                <div class="status-badge">
-                    <div class="pulse"></div>
-                    Active
-                </div>
-            </div>
-        </div>
+        <aside class="sidebar">
+            <div class="sidebar-title">Agents</div>
+            <div id="agents-list"></div>
+        </aside>
         
-        <div class="section">
+        <div class="content">
             <div class="section-title">📁 Projects</div>
+            <div class="project-grid" id="projects-list"></div>
             
-            <!-- Agent Dashboard -->
-            <div class="project-card">
-                <div class="project-header">
-                    <div class="project-icon" style="background: linear-gradient(135deg, var(--accent), #e67e22);">📊</div>
-                    <div>
-                        <div class="project-name">Agent Dashboard</div>
-                        <div class="project-desc">ramymrady.github.io/agent-dashboard • This page</div>
-                    </div>
-                    <div class="project-status live">Live</div>
-                </div>
-                <div class="project-body">
-                    <div class="project-label">Assigned Agent</div>
-                    <div class="assigned-agent">
-                        <div class="assigned-agent-avatar">⚡</div>
-                        <div>
-                            <div class="assigned-agent-name">MAGNAM</div>
-                            <div class="assigned-agent-role">Built just now • Static HTML, GitHub Pages</div>
-                        </div>
-                    </div>
-                    
-                    <div class="project-label">Tasks (completed today)</div>
-                    <div class="task-list">
-                        <div class="task-item done">
-                            <span class="task-icon">✅</span>
-                            <div class="task-content">
-                                <div class="task-title">Create dashboard and deploy to GitHub Pages</div>
-                                <div class="task-detail">Built index.html, pushed to RamyMRady/agent-dashboard repo</div>
-                            </div>
-                            <span class="task-priority done">Done</span>
-                        </div>
-                        <div class="task-item done">
-                            <span class="task-icon">✅</span>
-                            <div class="task-content">
-                                <div class="task-title">Add real project tasks from code audits</div>
-                                <div class="task-detail">Pulled actual issues from iProgramAI audit, not fake data</div>
-                            </div>
-                            <span class="task-priority done">Done</span>
-                        </div>
-                        <div class="task-item done">
-                            <span class="task-icon">✅</span>
-                            <div class="task-content">
-                                <div class="task-title">Remove tabs, single page layout</div>
-                                <div class="task-detail">Boss requested no tabs — simplified to scrollable page</div>
-                            </div>
-                            <span class="task-priority done">Done</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- iProgramAI -->
-            <div class="project-card">
-                <div class="project-header">
-                    <div class="project-icon iprogramai">🎓</div>
-                    <div>
-                        <div class="project-name">iProgramAI</div>
-                        <div class="project-desc">iprogramai.com • AI learning platform</div>
-                    </div>
-                    <div class="project-status live">Live</div>
-                </div>
-                <div class="project-body">
-                    <div class="project-label">Assigned Agent</div>
-                    <div class="assigned-agent">
-                        <div class="assigned-agent-avatar">⚡</div>
-                        <div>
-                            <div class="assigned-agent-name">MAGNAM</div>
-                            <div class="assigned-agent-role">Full stack • Next.js, Tailwind, Cloudflare Tunnel</div>
-                        </div>
-                    </div>
-                    
-                    <div class="project-label">Tasks (from code audit)</div>
-                    <div class="task-list">
-                        <div class="task-item critical">
-                            <span class="task-icon">🔴</span>
-                            <div class="task-content">
-                                <div class="task-title">Add GEMINI_API_KEY</div>
-                                <div class="task-detail">.env.local is empty — /learn page won't generate curriculum</div>
-                            </div>
-                            <span class="task-priority critical">Critical</span>
-                        </div>
-                        <div class="task-item critical">
-                            <span class="task-icon">🔴</span>
-                            <div class="task-content">
-                                <div class="task-title">Wire up real AI in Playground</div>
-                                <div class="task-detail">Currently uses hardcoded demoResponses[] — no actual AI calls</div>
-                            </div>
-                            <span class="task-priority critical">Critical</span>
-                        </div>
-                        <div class="task-item critical">
-                            <span class="task-icon">🔴</span>
-                            <div class="task-content">
-                                <div class="task-title">Connect Supabase for user progress</div>
-                                <div class="task-detail">@supabase/supabase-js installed but unused — progress lost on refresh</div>
-                            </div>
-                            <span class="task-priority critical">Critical</span>
-                        </div>
-                        <div class="task-item medium">
-                            <span class="task-icon">🟡</span>
-                            <div class="task-content">
-                                <div class="task-title">Fix email/password login</div>
-                                <div class="task-detail">Shows "coming soon" alert — remove form or implement credentials</div>
-                            </div>
-                            <span class="task-priority medium">Medium</span>
-                        </div>
-                        <div class="task-item medium">
-                            <span class="task-icon">🟡</span>
-                            <div class="task-content">
-                                <div class="task-title">Add Google OAuth</div>
-                                <div class="task-detail">AUTH_GOOGLE_ID not set — only GitHub works currently</div>
-                            </div>
-                            <span class="task-priority medium">Medium</span>
-                        </div>
-                        <div class="task-item medium">
-                            <span class="task-icon">🟡</span>
-                            <div class="task-content">
-                                <div class="task-title">Add auth middleware</div>
-                                <div class="task-detail">/course, /playground, /learn accessible without login</div>
-                            </div>
-                            <span class="task-priority medium">Medium</span>
-                        </div>
-                        <div class="task-item medium">
-                            <span class="task-icon">🟡</span>
-                            <div class="task-content">
-                                <div class="task-title">Replace fake testimonials & stats</div>
-                                <div class="task-detail">"10,000+ students" and reviews are placeholder content</div>
-                            </div>
-                            <span class="task-priority medium">Medium</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- NetAgents -->
-            <div class="project-card">
-                <div class="project-header">
-                    <div class="project-icon netagents">🌐</div>
-                    <div>
-                        <div class="project-name">NetAgents</div>
-                        <div class="project-desc">localhost:3333 • Multi-agent workspace</div>
-                    </div>
-                    <div class="project-status dev">Development</div>
-                </div>
-                <div class="project-body">
-                    <div class="project-label">Assigned Agent</div>
-                    <div class="assigned-agent">
-                        <div class="assigned-agent-avatar">⚡</div>
-                        <div>
-                            <div class="assigned-agent-name">MAGNAM</div>
-                            <div class="assigned-agent-role">Full stack • Node.js, Express, WebSocket</div>
-                        </div>
-                    </div>
-                    
-                    <div class="project-label">Tasks</div>
-                    <div class="task-list">
-                        <div class="task-item done">
-                            <span class="task-icon">✅</span>
-                            <div class="task-content">
-                                <div class="task-title">PIN recovery system</div>
-                                <div class="task-detail">Completed — recoverPin() reveals PIN when Operator ID entered</div>
-                            </div>
-                            <span class="task-priority done">Done</span>
-                        </div>
-                        <div class="task-item medium">
-                            <span class="task-icon">🟡</span>
-                            <div class="task-content">
-                                <div class="task-title">Deploy to production</div>
-                                <div class="task-detail">Currently localhost only — needs Cloudflare Tunnel or hosting</div>
-                            </div>
-                            <span class="task-priority medium">Medium</span>
-                        </div>
-                        <div class="task-item medium">
-                            <span class="task-icon">🟡</span>
-                            <div class="task-content">
-                                <div class="task-title">RAG pipeline optimization</div>
-                                <div class="task-detail">Document uploads work but retrieval could be faster</div>
-                            </div>
-                            <span class="task-priority medium">Medium</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- PharmaCRM -->
-            <div class="project-card">
-                <div class="project-header">
-                    <div class="project-icon pharmacrm">💊</div>
-                    <div>
-                        <div class="project-name">PharmaCRM</div>
-                        <div class="project-desc">Healthcare CRM for pharma sales</div>
-                    </div>
-                    <div class="project-status planning">Planning</div>
-                </div>
-                <div class="project-body">
-                    <div class="project-label">Assigned Agent</div>
-                    <div class="assigned-agent">
-                        <div class="assigned-agent-avatar">⚡</div>
-                        <div>
-                            <div class="assigned-agent-name">MAGNAM</div>
-                            <div class="assigned-agent-role">Full stack • Next.js, Supabase, Tailwind</div>
-                        </div>
-                    </div>
-                    
-                    <div class="project-label">Tasks</div>
-                    <div class="task-list">
-                        <div class="task-item critical">
-                            <span class="task-icon">🔴</span>
-                            <div class="task-content">
-                                <div class="task-title">Purchase domain</div>
-                                <div class="task-detail">No domain registered yet — waiting for Boss decision</div>
-                            </div>
-                            <span class="task-priority critical">Blocked</span>
-                        </div>
-                        <div class="task-item critical">
-                            <span class="task-icon">🔴</span>
-                            <div class="task-content">
-                                <div class="task-title">Set up Supabase</div>
-                                <div class="task-detail">Database not configured — needed for user data</div>
-                            </div>
-                            <span class="task-priority critical">Blocked</span>
-                        </div>
-                        <div class="task-item medium">
-                            <span class="task-icon">🟡</span>
-                            <div class="task-content">
-                                <div class="task-title">Finalize pricing tiers</div>
-                                <div class="task-detail">$9/$29/Enterprise proposed — needs approval</div>
-                            </div>
-                            <span class="task-priority medium">Medium</span>
-                        </div>
-                    </div>
-                </div>
+            <div class="activity-section">
+                <div class="section-title">📋 Recent Activity</div>
+                <div class="activity-log" id="activity-log"></div>
             </div>
         </div>
     </main>
+    
+    <script>
+        const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+            ? `http://127.0.0.1:5002`
+            : ''; // For GitHub Pages, we'll use static data
+        
+        let statusData = {
+            agents: [
+                {
+                    id: 'magnam',
+                    name: 'MAGNAM',
+                    emoji: '⚡',
+                    model: 'Claude Opus 4.5',
+                    status: 'working',
+                    currentTask: 'Building live dashboard',
+                    project: 'agent-dashboard',
+                    lastActivity: Date.now()
+                }
+            ],
+            projects: [
+                { id: 'agent-dashboard', name: 'Agent Dashboard', emoji: '📊', status: 'active', description: 'Real-time agent monitoring' },
+                { id: 'iprogramai', name: 'iProgramAI', emoji: '🎓', status: 'live', description: 'AI learning platform' },
+                { id: 'netagents', name: 'NetAgents', emoji: '🌐', status: 'development', description: 'Multi-agent workspace' },
+                { id: 'pharmacrm', name: 'PharmaCRM', emoji: '💊', status: 'planning', description: 'Healthcare CRM' }
+            ],
+            activity: [
+                { agentId: 'magnam', task: 'Building live dashboard', project: 'agent-dashboard', action: 'start', timestamp: Date.now() }
+            ]
+        };
+        
+        function timeAgo(timestamp) {
+            const seconds = Math.floor((Date.now() - timestamp) / 1000);
+            if (seconds < 60) return 'just now';
+            if (seconds < 3600) return `${Math.floor(seconds / 60)}m ago`;
+            if (seconds < 86400) return `${Math.floor(seconds / 3600)}h ago`;
+            return `${Math.floor(seconds / 86400)}d ago`;
+        }
+        
+        function renderAgents() {
+            const container = document.getElementById('agents-list');
+            container.innerHTML = statusData.agents.map(agent => {
+                const project = statusData.projects.find(p => p.id === agent.project);
+                return `
+                    <div class="agent-card">
+                        <div class="agent-header">
+                            <div class="agent-avatar">${agent.emoji}</div>
+                            <div>
+                                <div class="agent-name">${agent.name}</div>
+                                <div class="agent-model">${agent.model}</div>
+                            </div>
+                        </div>
+                        <div class="agent-status ${agent.status}">
+                            <div class="status-dot ${agent.status}"></div>
+                            ${agent.status === 'working' ? 'Working' : 'Idle'}
+                        </div>
+                        ${agent.currentTask ? `
+                            <div class="agent-task">
+                                <div class="agent-task-label">Current Task</div>
+                                <div>${agent.currentTask}</div>
+                                ${project ? `<div class="agent-task-project">${project.emoji} ${project.name}</div>` : ''}
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        function renderProjects() {
+            const container = document.getElementById('projects-list');
+            container.innerHTML = statusData.projects.map(project => {
+                const projectAgents = statusData.agents.filter(a => a.project === project.id);
+                const idleAgents = statusData.agents.filter(a => a.status === 'idle' && !a.project);
+                
+                return `
+                    <div class="project-card">
+                        <div class="project-header">
+                            <div class="project-icon ${project.id}">${project.emoji}</div>
+                            <div>
+                                <div class="project-name">${project.name}</div>
+                                <div class="project-desc">${project.description}</div>
+                            </div>
+                            <div class="project-status ${project.status}">${project.status}</div>
+                        </div>
+                        <div class="project-agents">
+                            <div class="project-agents-title">Agents Working</div>
+                            ${projectAgents.length > 0 ? projectAgents.map(agent => `
+                                <div class="project-agent-row">
+                                    <div class="project-agent-avatar">${agent.emoji}</div>
+                                    <div class="project-agent-info">
+                                        <div class="project-agent-name">${agent.name}</div>
+                                        <div class="project-agent-task">${agent.currentTask || 'No active task'}</div>
+                                    </div>
+                                    <div class="project-agent-status ${agent.status}">
+                                        <div class="status-dot ${agent.status}"></div>
+                                        ${agent.status}
+                                    </div>
+                                </div>
+                            `).join('') : '<div class="no-agents">No agents assigned</div>'}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        function renderActivity() {
+            const container = document.getElementById('activity-log');
+            if (statusData.activity.length === 0) {
+                container.innerHTML = '<div class="empty-activity">No recent activity</div>';
+                return;
+            }
+            
+            container.innerHTML = statusData.activity.slice(0, 20).map(item => {
+                const agent = statusData.agents.find(a => a.id === item.agentId) || { emoji: '❓', name: 'Unknown' };
+                const project = statusData.projects.find(p => p.id === item.project);
+                const actionEmoji = item.action === 'complete' ? '✅' : '🔄';
+                
+                return `
+                    <div class="activity-item">
+                        <div class="activity-emoji">${agent.emoji}</div>
+                        <div class="activity-content">
+                            <div class="activity-task">${actionEmoji} ${item.task}</div>
+                            <div class="activity-meta">
+                                ${agent.name}${project ? ` • ${project.emoji} ${project.name}` : ' • Free task'}
+                            </div>
+                        </div>
+                        <div class="activity-time">${timeAgo(item.timestamp)}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        function updateLastUpdate() {
+            document.getElementById('last-update').textContent = new Date().toLocaleTimeString();
+        }
+        
+        async function fetchStatus() {
+            try {
+                const res = await fetch(`${API_BASE}/api/status`);
+                if (res.ok) {
+                    statusData = await res.json();
+                }
+            } catch (e) {
+                // Use static data if API not available
+                console.log('Using static data (API not available)');
+            }
+            render();
+        }
+        
+        function render() {
+            renderAgents();
+            renderProjects();
+            renderActivity();
+            updateLastUpdate();
+        }
+        
+        // Initial render
+        render();
+        
+        // Poll for updates every 2 seconds
+        setInterval(fetchStatus, 2000);
+    </script>
 </body>
 </html>
