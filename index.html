@@ -20,6 +20,7 @@
             --purple: #a371f7;
             --red: #f85149;
             --yellow: #d29922;
+            --cyan: #56d4dd;
         }
         
         body {
@@ -221,6 +222,177 @@
             font-weight: 600;
         }
         
+        /* Project Cards */
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+        }
+        
+        .project-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
+            transition: all 0.3s;
+        }
+        
+        .project-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-2px);
+        }
+        
+        .project-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        
+        .project-title-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .project-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+        
+        .project-icon.iprogramai { background: linear-gradient(135deg, #3498db, #2980b9); }
+        .project-icon.netagents { background: linear-gradient(135deg, #2ecc71, #27ae60); }
+        .project-icon.pharmacrm { background: linear-gradient(135deg, #e74c3c, #c0392b); }
+        
+        .project-name {
+            font-size: 18px;
+            font-weight: 700;
+        }
+        
+        .project-lead {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+        
+        .project-progress-badge {
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        .project-progress-badge.high { background: rgba(63, 185, 80, 0.2); color: var(--green); }
+        .project-progress-badge.medium { background: rgba(88, 166, 255, 0.2); color: var(--blue); }
+        .project-progress-badge.low { background: rgba(210, 153, 34, 0.2); color: var(--yellow); }
+        
+        .project-progress-bar {
+            height: 8px;
+            background: var(--bg-dark);
+            border-radius: 4px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        
+        .project-progress-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+        
+        .project-progress-fill.iprogramai { background: linear-gradient(90deg, #3498db, #56d4dd); }
+        .project-progress-fill.netagents { background: linear-gradient(90deg, #2ecc71, #58d68d); }
+        .project-progress-fill.pharmacrm { background: linear-gradient(90deg, #e74c3c, #f1948a); }
+        
+        .project-agents-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+        }
+        
+        .project-agent-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .project-agent {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 12px;
+            background: var(--bg-dark);
+            border-radius: 10px;
+            transition: background 0.2s;
+        }
+        
+        .project-agent:hover {
+            background: var(--bg-hover);
+        }
+        
+        .project-agent-avatar {
+            font-size: 20px;
+            width: 32px;
+            text-align: center;
+        }
+        
+        .project-agent-info {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .project-agent-name {
+            font-size: 13px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .project-agent-task {
+            font-size: 12px;
+            color: var(--text-muted);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .project-agent-progress {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+        
+        .mini-progress {
+            width: 60px;
+            height: 4px;
+            background: var(--bg-hover);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        
+        .mini-progress-fill {
+            height: 100%;
+            background: var(--green);
+            border-radius: 2px;
+            transition: width 0.3s;
+        }
+        
+        .progress-percent {
+            font-size: 11px;
+            color: var(--text-muted);
+            width: 32px;
+            text-align: right;
+        }
+        
         /* Activity Feed */
         .activity-feed {
             background: var(--bg-card);
@@ -398,9 +570,9 @@
             border-radius: 50%;
         }
         
-        .task-project-dot.dallas { background: #3498db; }
-        .task-project-dot.seattle { background: #2ecc71; }
-        .task-project-dot.houston { background: #e74c3c; }
+        .task-project-dot.iprogramai { background: #3498db; }
+        .task-project-dot.netagents { background: #2ecc71; }
+        .task-project-dot.pharmacrm { background: #e74c3c; }
         
         /* Progress Bar */
         .progress-bar {
@@ -437,6 +609,9 @@
             .sidebar {
                 display: none;
             }
+            .project-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
@@ -458,6 +633,10 @@
                 <div class="header-stat-label">Agents</div>
             </div>
             <div class="header-stat">
+                <div class="header-stat-value" id="project-count">3</div>
+                <div class="header-stat-label">Projects</div>
+            </div>
+            <div class="header-stat">
                 <div class="header-stat-value" id="tasks-count">0</div>
                 <div class="header-stat-label">Tasks Today</div>
             </div>
@@ -477,6 +656,13 @@
         <div class="content">
             <div class="section">
                 <div class="section-header">
+                    <h2 class="section-title">📁 Projects</h2>
+                </div>
+                <div class="project-grid" id="project-grid"></div>
+            </div>
+            
+            <div class="section">
+                <div class="section-header">
                     <h2 class="section-title">🔴 Currently Working</h2>
                 </div>
                 <div class="task-grid" id="active-tasks"></div>
@@ -492,12 +678,12 @@
     </main>
     
     <script>
-        // Agent definitions with simulated real-time status
+        // Agent definitions
         const agents = [
             { id: 'main', name: 'MAGNAM', emoji: '⚡', role: 'Orchestrator', model: 'Opus', type: 'orchestrator' },
-            { id: 'dallas', name: 'DALLAS', emoji: '🏙️', role: 'iProgramAI', model: 'Sonnet', type: 'project' },
-            { id: 'seattle', name: 'SEATTLE', emoji: '🌲', role: 'NetAgents', model: 'Sonnet', type: 'project' },
-            { id: 'houston', name: 'HOUSTON', emoji: '🚀', role: 'PharmaCRM', model: 'Sonnet', type: 'project' },
+            { id: 'dallas', name: 'DALLAS', emoji: '🏙️', role: 'iProgramAI Lead', model: 'Sonnet', type: 'project' },
+            { id: 'seattle', name: 'SEATTLE', emoji: '🌲', role: 'NetAgents Lead', model: 'Sonnet', type: 'project' },
+            { id: 'houston', name: 'HOUSTON', emoji: '🚀', role: 'PharmaCRM Lead', model: 'Sonnet', type: 'project' },
             { id: 'coder', name: 'CODER', emoji: '💻', role: 'Development', model: 'Sonnet', type: 'specialist' },
             { id: 'engineer', name: 'ENGINEER', emoji: '🔧', role: 'Architecture', model: 'Sonnet', type: 'specialist' },
             { id: 'researcher', name: 'RESEARCHER', emoji: '🔬', role: 'Research', model: 'Sonnet', type: 'specialist' },
@@ -511,6 +697,58 @@
             { id: 'megaman', name: 'MEGAMAN', emoji: '💪', role: 'Power Tasks', model: 'Sonnet', type: 'specialist' },
             { id: 'flash', name: 'FLASH', emoji: '⚡', role: 'Speed Tasks', model: 'Sonnet', type: 'specialist' },
             { id: 'ihelp', name: 'IHELP', emoji: '❓', role: 'Quick Help', model: 'Haiku', type: 'helper' }
+        ];
+        
+        // Project definitions
+        const projects = [
+            {
+                id: 'iprogramai',
+                name: 'iProgramAI',
+                emoji: '🎓',
+                description: 'AI Learning Platform',
+                lead: 'dallas',
+                color: '#3498db',
+                progress: 72,
+                agents: ['dallas', 'coder', 'writer', 'geek'],
+                tasks: {
+                    dallas: { task: 'Feature planning for v2.0', progress: 65 },
+                    coder: { task: 'AI Playground integration', progress: 40 },
+                    writer: { task: 'Course documentation', progress: 85 },
+                    geek: { task: '3D card animations', progress: 90 }
+                }
+            },
+            {
+                id: 'netagents',
+                name: 'NetAgents',
+                emoji: '🌐',
+                description: 'Multi-Agent Workspace',
+                lead: 'seattle',
+                color: '#2ecc71',
+                progress: 58,
+                agents: ['seattle', 'engineer', 'datascientist', 'researcher'],
+                tasks: {
+                    seattle: { task: 'PIN recovery system', progress: 100 },
+                    engineer: { task: 'WebSocket optimization', progress: 45 },
+                    datascientist: { task: 'RAG pipeline tuning', progress: 30 },
+                    researcher: { task: 'Agent architecture docs', progress: 60 }
+                }
+            },
+            {
+                id: 'pharmacrm',
+                name: 'PharmaCRM',
+                emoji: '💊',
+                description: 'Healthcare CRM Platform',
+                lead: 'houston',
+                color: '#e74c3c',
+                progress: 35,
+                agents: ['houston', 'analyst', 'financial', 'lawyer'],
+                tasks: {
+                    houston: { task: 'Dashboard wireframes', progress: 55 },
+                    analyst: { task: 'Data model design', progress: 40 },
+                    financial: { task: 'Pricing tier analysis', progress: 25 },
+                    lawyer: { task: 'HIPAA compliance review', progress: 20 }
+                }
+            }
         ];
         
         const taskTemplates = {
@@ -533,8 +771,6 @@
             ihelp: ['Quick answer', 'Simple lookup', 'Basic help']
         };
         
-        const projects = ['dallas', 'seattle', 'houston'];
-        
         let agentStates = {};
         let activityLog = [];
         let tasksToday = 0;
@@ -554,13 +790,25 @@
         agentStates['main'].status = 'working';
         agentStates['main'].task = 'Monitoring all agents';
         
+        // Initialize project agents as working
+        projects.forEach(project => {
+            project.agents.forEach(agentId => {
+                if (project.tasks[agentId]) {
+                    agentStates[agentId].status = 'working';
+                    agentStates[agentId].task = project.tasks[agentId].task;
+                    agentStates[agentId].project = project.id;
+                    agentStates[agentId].progress = project.tasks[agentId].progress;
+                }
+            });
+        });
+        
+        function getAgentById(id) {
+            return agents.find(a => a.id === id);
+        }
+        
         function getRandomTask(agentId) {
             const tasks = taskTemplates[agentId] || taskTemplates['coder'];
             return tasks[Math.floor(Math.random() * tasks.length)];
-        }
-        
-        function getRandomProject() {
-            return projects[Math.floor(Math.random() * projects.length)];
         }
         
         function timeAgo(date) {
@@ -570,19 +818,44 @@
             return `${Math.floor(seconds / 3600)}h ago`;
         }
         
+        function getProgressClass(progress) {
+            if (progress >= 70) return 'high';
+            if (progress >= 40) return 'medium';
+            return 'low';
+        }
+        
         function simulateActivity() {
-            // Randomly change agent states
+            // Slowly progress tasks
+            projects.forEach(project => {
+                project.agents.forEach(agentId => {
+                    if (project.tasks[agentId]) {
+                        const task = project.tasks[agentId];
+                        if (task.progress < 100) {
+                            task.progress += Math.random() * 2;
+                            if (task.progress > 100) task.progress = 100;
+                            agentStates[agentId].progress = task.progress;
+                        }
+                    }
+                });
+                
+                // Update project progress based on task averages
+                const taskProgresses = project.agents
+                    .filter(a => project.tasks[a])
+                    .map(a => project.tasks[a].progress);
+                project.progress = Math.round(taskProgresses.reduce((a, b) => a + b, 0) / taskProgresses.length);
+            });
+            
+            // Random activity for other agents
             agents.forEach(agent => {
-                if (agent.id === 'main') return; // MAGNAM always working
+                if (agent.id === 'main') return;
+                if (projects.some(p => p.agents.includes(agent.id))) return; // Skip project agents
                 
                 const state = agentStates[agent.id];
                 const rand = Math.random();
                 
-                if (state.status === 'idle' && rand < 0.1) {
-                    // Start working
+                if (state.status === 'idle' && rand < 0.05) {
                     state.status = 'working';
                     state.task = getRandomTask(agent.id);
-                    state.project = getRandomProject();
                     state.progress = 0;
                     state.startTime = Date.now();
                     tasksToday++;
@@ -590,14 +863,13 @@
                     activityLog.unshift({
                         agent,
                         task: state.task,
-                        project: state.project,
+                        project: null,
                         status: 'working',
                         time: Date.now()
                     });
-                } else if (state.status === 'working') {
-                    state.progress += Math.random() * 20;
+                } else if (state.status === 'working' && !projects.some(p => p.agents.includes(agent.id))) {
+                    state.progress += Math.random() * 15;
                     if (state.progress >= 100) {
-                        // Complete task
                         activityLog.unshift({
                             agent,
                             task: state.task,
@@ -614,7 +886,6 @@
                 }
             });
             
-            // Keep activity log trimmed
             activityLog = activityLog.slice(0, 20);
         }
         
@@ -637,9 +908,70 @@
             }).join('');
         }
         
+        function renderProjects() {
+            const container = document.getElementById('project-grid');
+            container.innerHTML = projects.map(project => {
+                const lead = getAgentById(project.lead);
+                return `
+                    <div class="project-card">
+                        <div class="project-header">
+                            <div class="project-title-area">
+                                <div class="project-icon ${project.id}">${project.emoji}</div>
+                                <div>
+                                    <div class="project-name">${project.name}</div>
+                                    <div class="project-lead">Lead: ${lead.emoji} ${lead.name}</div>
+                                </div>
+                            </div>
+                            <div class="project-progress-badge ${getProgressClass(project.progress)}">${Math.round(project.progress)}%</div>
+                        </div>
+                        
+                        <div class="project-progress-bar">
+                            <div class="project-progress-fill ${project.id}" style="width: ${project.progress}%"></div>
+                        </div>
+                        
+                        <div class="project-agents-title">Team (${project.agents.length} agents)</div>
+                        <div class="project-agent-list">
+                            ${project.agents.map(agentId => {
+                                const agent = getAgentById(agentId);
+                                const task = project.tasks[agentId];
+                                const state = agentStates[agentId];
+                                return `
+                                    <div class="project-agent">
+                                        <div class="project-agent-avatar">${agent.emoji}</div>
+                                        <div class="project-agent-info">
+                                            <div class="project-agent-name">
+                                                ${agent.name}
+                                                <span class="agent-status-dot ${state.status}"></span>
+                                            </div>
+                                            <div class="project-agent-task">${task ? task.task : 'Idle'}</div>
+                                        </div>
+                                        <div class="project-agent-progress">
+                                            <div class="mini-progress">
+                                                <div class="mini-progress-fill" style="width: ${task ? task.progress : 0}%"></div>
+                                            </div>
+                                            <span class="progress-percent">${task ? Math.round(task.progress) : 0}%</span>
+                                        </div>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
         function renderActiveTasks() {
             const container = document.getElementById('active-tasks');
-            const activeAgents = agents.filter(a => agentStates[a.id].status === 'working');
+            const activeAgents = agents.filter(a => 
+                agentStates[a.id].status === 'working' && 
+                !projects.some(p => p.agents.includes(a.id))
+            );
+            
+            // Add MAGNAM
+            const magnam = agents.find(a => a.id === 'main');
+            if (!activeAgents.includes(magnam)) {
+                activeAgents.unshift(magnam);
+            }
             
             if (activeAgents.length === 0) {
                 container.innerHTML = `
@@ -673,9 +1005,11 @@
                             ` : '<span></span>'}
                             <span>${state.startTime ? timeAgo(state.startTime) : ''}</span>
                         </div>
-                        <div class="progress-bar">
-                            <div class="progress-fill" style="width: ${Math.min(state.progress, 100)}%"></div>
-                        </div>
+                        ${agent.id !== 'main' ? `
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: ${Math.min(state.progress, 100)}%"></div>
+                            </div>
+                        ` : ''}
                     </div>
                 `;
             }).join('');
@@ -721,6 +1055,7 @@
         function render() {
             simulateActivity();
             renderSidebar();
+            renderProjects();
             renderActiveTasks();
             renderActivityFeed();
             updateStats();
