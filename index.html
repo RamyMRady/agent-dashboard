@@ -20,11 +20,10 @@
             --purple: #a371f7;
             --red: #f85149;
             --yellow: #d29922;
-            --cyan: #56d4dd;
         }
         
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: var(--bg-dark);
             color: var(--text);
             min-height: 100vh;
@@ -38,15 +37,6 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-        
-        .header-left {
-            display: flex;
-            align-items: center;
-            gap: 16px;
         }
         
         .logo {
@@ -57,35 +47,15 @@
             gap: 10px;
         }
         
-        .logo-icon {
-            font-size: 28px;
-        }
-        
-        .header-stats {
-            display: flex;
-            gap: 24px;
-        }
-        
-        .header-stat {
-            text-align: center;
-        }
-        
-        .header-stat-value {
-            font-size: 20px;
-            font-weight: 600;
-        }
-        
-        .header-stat-label {
-            font-size: 12px;
-            color: var(--text-muted);
-        }
-        
-        .status-live {
+        .status-badge {
             display: flex;
             align-items: center;
             gap: 8px;
-            font-size: 14px;
+            padding: 8px 16px;
+            background: rgba(63, 185, 80, 0.15);
+            border-radius: 20px;
             color: var(--green);
+            font-size: 14px;
         }
         
         .pulse {
@@ -97,227 +67,90 @@
         }
         
         @keyframes pulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.5; transform: scale(1.2); }
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
         }
         
-        /* Main Layout */
-        .main {
-            display: grid;
-            grid-template-columns: 320px 1fr;
-            min-height: calc(100vh - 65px);
-        }
-        
-        /* Sidebar - Agent List */
-        .sidebar {
+        /* Navigation Tabs */
+        .nav-tabs {
             background: var(--bg-card);
-            border-right: 1px solid var(--border);
-            overflow-y: auto;
-        }
-        
-        .sidebar-header {
-            padding: 16px;
             border-bottom: 1px solid var(--border);
-            font-weight: 600;
-            color: var(--text-muted);
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        
-        .agent-list {
-            padding: 8px;
-        }
-        
-        .agent-item {
+            padding: 0 24px;
             display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background 0.2s;
-            margin-bottom: 4px;
+            gap: 0;
         }
         
-        .agent-item:hover {
-            background: var(--bg-hover);
-        }
-        
-        .agent-item.active {
-            background: var(--bg-hover);
-            border: 1px solid var(--border);
-        }
-        
-        .agent-item.working {
-            border-left: 3px solid var(--green);
-        }
-        
-        .agent-item.busy {
-            border-left: 3px solid var(--yellow);
-        }
-        
-        .agent-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            background: var(--bg-dark);
-        }
-        
-        .agent-info {
-            flex: 1;
-            min-width: 0;
-        }
-        
-        .agent-name {
-            font-weight: 600;
+        .nav-tab {
+            padding: 16px 24px;
             font-size: 14px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .agent-role {
-            font-size: 12px;
+            font-weight: 500;
             color: var(--text-muted);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
         }
         
-        .agent-status-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            flex-shrink: 0;
+        .nav-tab:hover {
+            color: var(--text);
         }
         
-        .agent-status-dot.idle { background: var(--text-muted); }
-        .agent-status-dot.working { background: var(--green); animation: pulse 2s infinite; }
-        .agent-status-dot.busy { background: var(--yellow); animation: pulse 1s infinite; }
-        
-        /* Content Area */
-        .content {
-            padding: 24px;
-            overflow-y: auto;
+        .nav-tab.active {
+            color: var(--accent);
+            border-bottom-color: var(--accent);
         }
         
+        /* Main Content */
+        .main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 32px 24px;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* Section */
         .section {
             margin-bottom: 32px;
         }
         
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 16px;
-        }
-        
         .section-title {
-            font-size: 18px;
+            font-size: 20px;
             font-weight: 600;
-        }
-        
-        /* Project Tabs */
-        .project-tabs {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 20px;
-            border-bottom: 1px solid var(--border);
-            padding-bottom: 12px;
-        }
-        
-        .project-tab {
+            margin-bottom: 16px;
             display: flex;
             align-items: center;
             gap: 10px;
-            padding: 12px 20px;
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.2s;
-            position: relative;
         }
         
-        .project-tab:hover {
-            background: var(--bg-hover);
-            border-color: var(--text-muted);
-        }
-        
-        .project-tab.active {
-            border-color: var(--accent);
-            background: var(--bg-hover);
-        }
-        
-        .project-tab.active::after {
-            content: '';
-            position: absolute;
-            bottom: -13px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 40px;
-            height: 3px;
-            background: var(--accent);
-            border-radius: 2px;
-        }
-        
-        .project-tab-icon {
-            width: 36px;
-            height: 36px;
-            border-radius: 8px;
+        /* Project Cards */
+        .project-list {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
+            flex-direction: column;
+            gap: 24px;
         }
         
-        .project-tab-icon.iprogramai { background: linear-gradient(135deg, #3498db, #2980b9); }
-        .project-tab-icon.netagents { background: linear-gradient(135deg, #2ecc71, #27ae60); }
-        .project-tab-icon.pharmacrm { background: linear-gradient(135deg, #e74c3c, #c0392b); }
-        
-        .project-tab-info {
-            text-align: left;
-        }
-        
-        .project-tab-name {
-            font-weight: 600;
-            font-size: 14px;
-        }
-        
-        .project-tab-progress {
-            font-size: 12px;
-            color: var(--text-muted);
-        }
-        
-        /* Project Detail */
-        .project-detail {
+        .project-card {
             background: var(--bg-card);
             border: 1px solid var(--border);
             border-radius: 16px;
+            overflow: hidden;
+        }
+        
+        .project-header {
             padding: 24px;
-        }
-        
-        .project-detail-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 24px;
-            padding-bottom: 20px;
             border-bottom: 1px solid var(--border);
-        }
-        
-        .project-detail-title-area {
             display: flex;
             align-items: center;
             gap: 16px;
         }
         
-        .project-detail-icon {
+        .project-icon {
             width: 56px;
             height: 56px;
             border-radius: 14px;
@@ -327,189 +160,66 @@
             font-size: 28px;
         }
         
-        .project-detail-icon.iprogramai { background: linear-gradient(135deg, #3498db, #2980b9); }
-        .project-detail-icon.netagents { background: linear-gradient(135deg, #2ecc71, #27ae60); }
-        .project-detail-icon.pharmacrm { background: linear-gradient(135deg, #e74c3c, #c0392b); }
+        .project-icon.iprogramai { background: linear-gradient(135deg, #3498db, #2980b9); }
+        .project-icon.netagents { background: linear-gradient(135deg, #2ecc71, #27ae60); }
+        .project-icon.pharmacrm { background: linear-gradient(135deg, #9b59b6, #8e44ad); }
         
-        .project-detail-name {
-            font-size: 24px;
-            font-weight: 700;
-        }
-        
-        .project-detail-desc {
-            font-size: 14px;
-            color: var(--text-muted);
-            margin-top: 4px;
-        }
-        
-        .project-detail-stats {
-            display: flex;
-            gap: 24px;
-        }
-        
-        .project-stat {
-            text-align: center;
-        }
-        
-        .project-stat-value {
-            font-size: 24px;
-            font-weight: 700;
-        }
-        
-        .project-stat-label {
-            font-size: 12px;
-            color: var(--text-muted);
-        }
-        
-        .project-overall-progress {
-            margin-bottom: 24px;
-        }
-        
-        .project-overall-label {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 8px;
-            font-size: 13px;
-        }
-        
-        .project-overall-bar {
-            height: 12px;
-            background: var(--bg-dark);
-            border-radius: 6px;
-            overflow: hidden;
-        }
-        
-        .project-overall-fill {
-            height: 100%;
-            border-radius: 6px;
-            transition: width 0.5s ease;
-        }
-        
-        .project-overall-fill.iprogramai { background: linear-gradient(90deg, #3498db, #56d4dd); }
-        .project-overall-fill.netagents { background: linear-gradient(90deg, #2ecc71, #58d68d); }
-        .project-overall-fill.pharmacrm { background: linear-gradient(90deg, #e74c3c, #f1948a); }
-        
-        .project-agents-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 16px;
-        }
-        
-        .project-agent-card {
-            background: var(--bg-dark);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 16px;
-            transition: all 0.2s;
-        }
-        
-        .project-agent-card:hover {
-            border-color: var(--accent);
-        }
-        
-        .project-agent-card-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 12px;
-        }
-        
-        .project-agent-card-avatar {
-            width: 44px;
-            height: 44px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 22px;
-            background: var(--bg-hover);
-        }
-        
-        .project-agent-card-name {
-            font-weight: 600;
-            font-size: 15px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .project-agent-card-role {
-            font-size: 12px;
-            color: var(--text-muted);
-        }
-        
-        .project-agent-card-task {
-            font-size: 13px;
-            color: var(--text);
-            margin-bottom: 12px;
-            padding: 10px;
-            background: var(--bg-hover);
-            border-radius: 8px;
-        }
-        
-        .project-agent-card-progress {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        
-        .project-agent-card-bar {
+        .project-info {
             flex: 1;
-            height: 6px;
-            background: var(--bg-hover);
-            border-radius: 3px;
-            overflow: hidden;
         }
         
-        .project-agent-card-fill {
-            height: 100%;
-            background: var(--green);
-            border-radius: 3px;
-            transition: width 0.3s;
+        .project-name {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 4px;
         }
         
-        .project-agent-card-percent {
+        .project-desc {
+            color: var(--text-muted);
             font-size: 14px;
+        }
+        
+        .project-status {
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
             font-weight: 600;
-            color: var(--green);
-            min-width: 45px;
-            text-align: right;
         }
         
-        /* Project Cards (grid view - keeping for reference) */
-        .project-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 20px;
-        }
+        .project-status.active { background: rgba(63, 185, 80, 0.2); color: var(--green); }
+        .project-status.planning { background: rgba(88, 166, 255, 0.2); color: var(--blue); }
+        .project-status.paused { background: rgba(139, 148, 158, 0.2); color: var(--text-muted); }
         
-        .project-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 16px;
+        .project-body {
             padding: 24px;
-            transition: all 0.3s;
         }
         
-        .project-card:hover {
-            border-color: var(--accent);
-            transform: translateY(-2px);
+        .project-section-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 16px;
         }
         
-        .project-header {
+        /* Agent Assignment */
+        .agent-assignment {
             display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 20px;
-        }
-        
-        .project-title-area {
-            display: flex;
-            align-items: center;
+            flex-direction: column;
             gap: 12px;
         }
         
-        .project-icon {
+        .agent-row {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px;
+            background: var(--bg-dark);
+            border-radius: 12px;
+        }
+        
+        .agent-avatar {
             width: 48px;
             height: 48px;
             border-radius: 12px;
@@ -517,860 +227,371 @@
             align-items: center;
             justify-content: center;
             font-size: 24px;
-        }
-        
-        .project-icon.iprogramai { background: linear-gradient(135deg, #3498db, #2980b9); }
-        .project-icon.netagents { background: linear-gradient(135deg, #2ecc71, #27ae60); }
-        .project-icon.pharmacrm { background: linear-gradient(135deg, #e74c3c, #c0392b); }
-        
-        .project-name {
-            font-size: 18px;
-            font-weight: 700;
-        }
-        
-        .project-lead {
-            font-size: 13px;
-            color: var(--text-muted);
-        }
-        
-        .project-progress-badge {
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 14px;
-            font-weight: 600;
-        }
-        
-        .project-progress-badge.high { background: rgba(63, 185, 80, 0.2); color: var(--green); }
-        .project-progress-badge.medium { background: rgba(88, 166, 255, 0.2); color: var(--blue); }
-        .project-progress-badge.low { background: rgba(210, 153, 34, 0.2); color: var(--yellow); }
-        
-        .project-progress-bar {
-            height: 8px;
-            background: var(--bg-dark);
-            border-radius: 4px;
-            margin-bottom: 20px;
-            overflow: hidden;
-        }
-        
-        .project-progress-fill {
-            height: 100%;
-            border-radius: 4px;
-            transition: width 0.5s ease;
-        }
-        
-        .project-progress-fill.iprogramai { background: linear-gradient(90deg, #3498db, #56d4dd); }
-        .project-progress-fill.netagents { background: linear-gradient(90deg, #2ecc71, #58d68d); }
-        .project-progress-fill.pharmacrm { background: linear-gradient(90deg, #e74c3c, #f1948a); }
-        
-        .project-agents-title {
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 12px;
-        }
-        
-        .project-agent-list {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        
-        .project-agent {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 10px 12px;
-            background: var(--bg-dark);
-            border-radius: 10px;
-            transition: background 0.2s;
-        }
-        
-        .project-agent:hover {
             background: var(--bg-hover);
         }
         
-        .project-agent-avatar {
-            font-size: 20px;
-            width: 32px;
-            text-align: center;
-        }
-        
-        .project-agent-info {
+        .agent-details {
             flex: 1;
-            min-width: 0;
         }
         
-        .project-agent-name {
-            font-size: 13px;
+        .agent-name {
             font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        
-        .project-agent-task {
-            font-size: 12px;
-            color: var(--text-muted);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        
-        .project-agent-progress {
+            font-size: 15px;
             display: flex;
             align-items: center;
             gap: 8px;
-            flex-shrink: 0;
         }
         
-        .mini-progress {
-            width: 60px;
-            height: 4px;
-            background: var(--bg-hover);
-            border-radius: 2px;
-            overflow: hidden;
-        }
-        
-        .mini-progress-fill {
-            height: 100%;
-            background: var(--green);
-            border-radius: 2px;
-            transition: width 0.3s;
-        }
-        
-        .progress-percent {
+        .agent-role-tag {
             font-size: 11px;
-            color: var(--text-muted);
-            width: 32px;
-            text-align: right;
-        }
-        
-        /* Activity Feed */
-        .activity-feed {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            overflow: hidden;
-        }
-        
-        .activity-item {
-            padding: 16px;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            gap: 12px;
-        }
-        
-        .activity-item:last-child {
-            border-bottom: none;
-        }
-        
-        .activity-avatar {
-            width: 36px;
-            height: 36px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-            background: var(--bg-dark);
-            flex-shrink: 0;
-        }
-        
-        .activity-content {
-            flex: 1;
-        }
-        
-        .activity-header {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 4px;
-        }
-        
-        .activity-agent {
-            font-weight: 600;
-            font-size: 14px;
-        }
-        
-        .activity-time {
-            font-size: 12px;
+            padding: 2px 8px;
+            border-radius: 4px;
+            background: var(--bg-hover);
             color: var(--text-muted);
         }
         
-        .activity-task {
-            font-size: 14px;
-            color: var(--text);
-            margin-bottom: 8px;
+        .agent-responsibility {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 4px;
         }
         
-        .activity-status {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 4px 10px;
-            border-radius: 12px;
-            font-size: 12px;
-            font-weight: 500;
-        }
-        
-        .activity-status.working {
-            background: rgba(63, 185, 80, 0.15);
-            color: var(--green);
-        }
-        
-        .activity-status.completed {
-            background: rgba(88, 166, 255, 0.15);
-            color: var(--blue);
-        }
-        
-        .activity-status.busy {
-            background: rgba(210, 153, 34, 0.15);
-            color: var(--yellow);
-        }
-        
-        /* Task Cards */
-        .task-grid {
+        /* Overview Cards */
+        .overview-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 16px;
+            margin-bottom: 32px;
         }
         
-        .task-card {
+        .overview-card {
             background: var(--bg-card);
             border: 1px solid var(--border);
             border-radius: 12px;
             padding: 20px;
-            transition: all 0.2s;
         }
         
-        .task-card:hover {
-            border-color: var(--accent);
-        }
-        
-        .task-card.active {
-            border-color: var(--green);
-            box-shadow: 0 0 0 1px var(--green);
-        }
-        
-        .task-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 16px;
-        }
-        
-        .task-avatar {
-            font-size: 28px;
-        }
-        
-        .task-agent-name {
-            font-weight: 600;
-            font-size: 16px;
-        }
-        
-        .task-agent-role {
+        .overview-card-title {
             font-size: 13px;
             color: var(--text-muted);
+            margin-bottom: 8px;
         }
         
-        .task-status-badge {
-            margin-left: auto;
-            padding: 4px 12px;
-            border-radius: 12px;
-            font-size: 12px;
-            font-weight: 600;
-            text-transform: uppercase;
+        .overview-card-value {
+            font-size: 32px;
+            font-weight: 700;
         }
         
-        .task-status-badge.idle {
-            background: var(--bg-hover);
+        .overview-card-sub {
+            font-size: 13px;
             color: var(--text-muted);
+            margin-top: 4px;
         }
         
-        .task-status-badge.working {
-            background: rgba(63, 185, 80, 0.2);
-            color: var(--green);
-        }
-        
-        .task-status-badge.busy {
-            background: rgba(210, 153, 34, 0.2);
-            color: var(--yellow);
-        }
-        
-        .task-description {
-            font-size: 14px;
-            color: var(--text);
-            margin-bottom: 12px;
-            min-height: 40px;
-        }
-        
-        .task-meta {
-            display: flex;
-            justify-content: space-between;
-            font-size: 12px;
-            color: var(--text-muted);
-        }
-        
-        .task-project {
+        /* Agent Card for Overview */
+        .main-agent-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 20px;
         }
         
-        .task-project-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
+        .main-agent-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            background: linear-gradient(135deg, var(--accent), #e67e22);
         }
         
-        .task-project-dot.iprogramai { background: #3498db; }
-        .task-project-dot.netagents { background: #2ecc71; }
-        .task-project-dot.pharmacrm { background: #e74c3c; }
+        .main-agent-info h2 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
         
-        /* Progress Bar */
-        .progress-bar {
-            height: 4px;
-            background: var(--bg-dark);
-            border-radius: 2px;
+        .main-agent-info p {
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+        
+        .main-agent-status {
+            margin-left: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 8px;
+        }
+        
+        /* Tech Stack */
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
             margin-top: 12px;
-            overflow: hidden;
         }
         
-        .progress-fill {
-            height: 100%;
-            background: var(--green);
-            border-radius: 2px;
-            transition: width 0.5s ease;
-        }
-        
-        /* Empty State */
-        .empty-state {
-            text-align: center;
-            padding: 48px;
+        .tech-tag {
+            padding: 6px 12px;
+            background: var(--bg-hover);
+            border-radius: 6px;
+            font-size: 12px;
             color: var(--text-muted);
         }
         
-        .empty-state-icon {
-            font-size: 48px;
-            margin-bottom: 16px;
-        }
-        
-        @media (max-width: 900px) {
-            .main {
-                grid-template-columns: 1fr;
-            }
-            .sidebar {
-                display: none;
-            }
-            .project-grid {
-                grid-template-columns: 1fr;
-            }
+        @media (max-width: 768px) {
+            .nav-tabs { overflow-x: auto; }
+            .project-header { flex-direction: column; text-align: center; }
+            .main-agent-card { flex-direction: column; text-align: center; }
+            .main-agent-status { margin-left: 0; align-items: center; }
         }
     </style>
 </head>
 <body>
     <header class="header">
-        <div class="header-left">
-            <div class="logo">
-                <span class="logo-icon">⚡</span>
-                <span>MAGNAM</span>
-            </div>
+        <div class="logo">
+            <span>⚡</span>
+            <span>MAGNAM</span>
         </div>
-        <div class="header-stats">
-            <div class="header-stat">
-                <div class="header-stat-value" id="active-count">0</div>
-                <div class="header-stat-label">Active</div>
-            </div>
-            <div class="header-stat">
-                <div class="header-stat-value" id="total-count">17</div>
-                <div class="header-stat-label">Agents</div>
-            </div>
-            <div class="header-stat">
-                <div class="header-stat-value" id="project-count">3</div>
-                <div class="header-stat-label">Projects</div>
-            </div>
-            <div class="header-stat">
-                <div class="header-stat-value" id="tasks-count">0</div>
-                <div class="header-stat-label">Tasks Today</div>
-            </div>
-        </div>
-        <div class="status-live">
+        <div class="status-badge">
             <div class="pulse"></div>
-            <span id="last-update">Live</span>
+            <span>Online</span>
         </div>
     </header>
     
+    <nav class="nav-tabs">
+        <div class="nav-tab active" data-tab="overview">Overview</div>
+        <div class="nav-tab" data-tab="projects">Projects</div>
+        <div class="nav-tab" data-tab="agents">Agents</div>
+    </nav>
+    
     <main class="main">
-        <aside class="sidebar">
-            <div class="sidebar-header">All Agents</div>
-            <div class="agent-list" id="agent-list"></div>
-        </aside>
+        <!-- Overview Tab -->
+        <div class="tab-content active" id="overview">
+            <div class="section">
+                <div class="main-agent-card">
+                    <div class="main-agent-avatar">⚡</div>
+                    <div class="main-agent-info">
+                        <h2>MAGNAM</h2>
+                        <p>Primary AI Assistant • Claude Opus 4.5</p>
+                        <p style="margin-top: 8px; color: var(--text);">Orchestrates all projects and handles direct requests from Boss</p>
+                    </div>
+                    <div class="main-agent-status">
+                        <div class="status-badge">
+                            <div class="pulse"></div>
+                            Active
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="overview-grid">
+                <div class="overview-card">
+                    <div class="overview-card-title">Active Projects</div>
+                    <div class="overview-card-value">3</div>
+                    <div class="overview-card-sub">iProgramAI, NetAgents, PharmaCRM</div>
+                </div>
+                <div class="overview-card">
+                    <div class="overview-card-title">Agent</div>
+                    <div class="overview-card-value">1</div>
+                    <div class="overview-card-sub">MAGNAM (handles all)</div>
+                </div>
+                <div class="overview-card">
+                    <div class="overview-card-title">Host</div>
+                    <div class="overview-card-value">Mac mini</div>
+                    <div class="overview-card-sub">Always-on, Cloudflare Tunnel</div>
+                </div>
+            </div>
+        </div>
         
-        <div class="content">
-            <div class="section">
-                <div class="section-header">
-                    <h2 class="section-title">📁 Projects</h2>
-                </div>
-                <div class="project-tabs" id="project-tabs"></div>
-                <div class="project-detail" id="project-detail"></div>
-            </div>
+        <!-- Projects Tab -->
+        <div class="tab-content" id="projects">
+            <div class="section-title">📁 Projects</div>
             
-            <div class="section">
-                <div class="section-header">
-                    <h2 class="section-title">🔴 Currently Working</h2>
+            <div class="project-list">
+                <!-- iProgramAI -->
+                <div class="project-card">
+                    <div class="project-header">
+                        <div class="project-icon iprogramai">🎓</div>
+                        <div class="project-info">
+                            <div class="project-name">iProgramAI</div>
+                            <div class="project-desc">AI-powered learning platform for programming education</div>
+                        </div>
+                        <div class="project-status active">Live</div>
+                    </div>
+                    <div class="project-body">
+                        <div class="project-section-title">Assigned Agent</div>
+                        <div class="agent-assignment">
+                            <div class="agent-row">
+                                <div class="agent-avatar">⚡</div>
+                                <div class="agent-details">
+                                    <div class="agent-name">
+                                        MAGNAM
+                                        <span class="agent-role-tag">Full Stack</span>
+                                    </div>
+                                    <div class="agent-responsibility">
+                                        Handles all development, UI updates, content, and deployment. Self-hosted on Mac mini via Cloudflare Tunnel at iprogramai.com
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tech-stack">
+                            <span class="tech-tag">Next.js 15</span>
+                            <span class="tech-tag">Tailwind CSS</span>
+                            <span class="tech-tag">shadcn/ui</span>
+                            <span class="tech-tag">Cloudflare Tunnel</span>
+                        </div>
+                    </div>
                 </div>
-                <div class="task-grid" id="active-tasks"></div>
+                
+                <!-- NetAgents -->
+                <div class="project-card">
+                    <div class="project-header">
+                        <div class="project-icon netagents">🌐</div>
+                        <div class="project-info">
+                            <div class="project-name">NetAgents</div>
+                            <div class="project-desc">Multi-agent workspace with RAG, TTS, and themed UI</div>
+                        </div>
+                        <div class="project-status active">Development</div>
+                    </div>
+                    <div class="project-body">
+                        <div class="project-section-title">Assigned Agent</div>
+                        <div class="agent-assignment">
+                            <div class="agent-row">
+                                <div class="agent-avatar">⚡</div>
+                                <div class="agent-details">
+                                    <div class="agent-name">
+                                        MAGNAM
+                                        <span class="agent-role-tag">Full Stack</span>
+                                    </div>
+                                    <div class="agent-responsibility">
+                                        Server development, UI theming, PIN system, RAG integration. Runs on localhost:3333
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tech-stack">
+                            <span class="tech-tag">Node.js</span>
+                            <span class="tech-tag">Express</span>
+                            <span class="tech-tag">WebSocket</span>
+                            <span class="tech-tag">Murf.ai TTS</span>
+                            <span class="tech-tag">RAG</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- PharmaCRM -->
+                <div class="project-card">
+                    <div class="project-header">
+                        <div class="project-icon pharmacrm">💊</div>
+                        <div class="project-info">
+                            <div class="project-name">PharmaCRM</div>
+                            <div class="project-desc">Healthcare CRM platform for pharmaceutical sales teams</div>
+                        </div>
+                        <div class="project-status planning">Planning</div>
+                    </div>
+                    <div class="project-body">
+                        <div class="project-section-title">Assigned Agent</div>
+                        <div class="agent-assignment">
+                            <div class="agent-row">
+                                <div class="agent-avatar">⚡</div>
+                                <div class="agent-details">
+                                    <div class="agent-name">
+                                        MAGNAM
+                                        <span class="agent-role-tag">Full Stack</span>
+                                    </div>
+                                    <div class="agent-responsibility">
+                                        Design, development, compliance review. Waiting for domain purchase and Supabase setup.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tech-stack">
+                            <span class="tech-tag">Next.js</span>
+                            <span class="tech-tag">Supabase</span>
+                            <span class="tech-tag">Tailwind CSS</span>
+                        </div>
+                    </div>
+                </div>
             </div>
+        </div>
+        
+        <!-- Agents Tab -->
+        <div class="tab-content" id="agents">
+            <div class="section-title">🤖 Agents</div>
             
-            <div class="section">
-                <div class="section-header">
-                    <h2 class="section-title">📋 Recent Activity</h2>
+            <div class="project-list">
+                <div class="project-card">
+                    <div class="project-header">
+                        <div class="agent-avatar" style="width: 56px; height: 56px; font-size: 28px; background: linear-gradient(135deg, var(--accent), #e67e22);">⚡</div>
+                        <div class="project-info">
+                            <div class="project-name">MAGNAM</div>
+                            <div class="project-desc">Primary Agent • Claude Opus 4.5 • OpenClaw</div>
+                        </div>
+                        <div class="project-status active">Online</div>
+                    </div>
+                    <div class="project-body">
+                        <div class="project-section-title">Capabilities</div>
+                        <div class="tech-stack">
+                            <span class="tech-tag">Code Generation</span>
+                            <span class="tech-tag">File Operations</span>
+                            <span class="tech-tag">Shell Commands</span>
+                            <span class="tech-tag">Web Search</span>
+                            <span class="tech-tag">Browser Control</span>
+                            <span class="tech-tag">Messaging (WhatsApp)</span>
+                            <span class="tech-tag">Cron Jobs</span>
+                            <span class="tech-tag">Memory</span>
+                        </div>
+                        
+                        <div class="project-section-title" style="margin-top: 20px;">Assigned Projects</div>
+                        <div class="agent-assignment">
+                            <div class="agent-row">
+                                <div class="project-icon iprogramai" style="width: 40px; height: 40px; font-size: 20px;">🎓</div>
+                                <div class="agent-details">
+                                    <div class="agent-name">iProgramAI</div>
+                                    <div class="agent-responsibility">Full stack development and deployment</div>
+                                </div>
+                            </div>
+                            <div class="agent-row">
+                                <div class="project-icon netagents" style="width: 40px; height: 40px; font-size: 20px;">🌐</div>
+                                <div class="agent-details">
+                                    <div class="agent-name">NetAgents</div>
+                                    <div class="agent-responsibility">Server development and UI theming</div>
+                                </div>
+                            </div>
+                            <div class="agent-row">
+                                <div class="project-icon pharmacrm" style="width: 40px; height: 40px; font-size: 20px;">💊</div>
+                                <div class="agent-details">
+                                    <div class="agent-name">PharmaCRM</div>
+                                    <div class="agent-responsibility">Planning and initial development</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="activity-feed" id="activity-feed"></div>
             </div>
         </div>
     </main>
     
     <script>
-        // Agent definitions
-        const agents = [
-            { id: 'main', name: 'MAGNAM', emoji: '⚡', role: 'Orchestrator', model: 'Opus', type: 'orchestrator' },
-            { id: 'dallas', name: 'DALLAS', emoji: '🏙️', role: 'iProgramAI Lead', model: 'Sonnet', type: 'project' },
-            { id: 'seattle', name: 'SEATTLE', emoji: '🌲', role: 'NetAgents Lead', model: 'Sonnet', type: 'project' },
-            { id: 'houston', name: 'HOUSTON', emoji: '🚀', role: 'PharmaCRM Lead', model: 'Sonnet', type: 'project' },
-            { id: 'coder', name: 'CODER', emoji: '💻', role: 'Development', model: 'Sonnet', type: 'specialist' },
-            { id: 'engineer', name: 'ENGINEER', emoji: '🔧', role: 'Architecture', model: 'Sonnet', type: 'specialist' },
-            { id: 'researcher', name: 'RESEARCHER', emoji: '🔬', role: 'Research', model: 'Sonnet', type: 'specialist' },
-            { id: 'writer', name: 'WRITER', emoji: '✍️', role: 'Documentation', model: 'Sonnet', type: 'specialist' },
-            { id: 'analyst', name: 'ANALYST', emoji: '📊', role: 'Analysis', model: 'Sonnet', type: 'specialist' },
-            { id: 'datascientist', name: 'DATASCIENTIST', emoji: '🤖', role: 'ML/Data', model: 'Sonnet', type: 'specialist' },
-            { id: 'scientist', name: 'SCIENTIST', emoji: '🧪', role: 'Science', model: 'Sonnet', type: 'specialist' },
-            { id: 'financial', name: 'FINANCIAL', emoji: '💰', role: 'Finance', model: 'Sonnet', type: 'specialist' },
-            { id: 'lawyer', name: 'LAWYER', emoji: '⚖️', role: 'Legal', model: 'Sonnet', type: 'specialist' },
-            { id: 'geek', name: 'GEEK', emoji: '🎮', role: 'Tech/UI', model: 'Sonnet', type: 'specialist' },
-            { id: 'megaman', name: 'MEGAMAN', emoji: '💪', role: 'Power Tasks', model: 'Sonnet', type: 'specialist' },
-            { id: 'flash', name: 'FLASH', emoji: '⚡', role: 'Speed Tasks', model: 'Sonnet', type: 'specialist' },
-            { id: 'ihelp', name: 'IHELP', emoji: '❓', role: 'Quick Help', model: 'Haiku', type: 'helper' }
-        ];
-        
-        // Project definitions
-        const projects = [
-            {
-                id: 'iprogramai',
-                name: 'iProgramAI',
-                emoji: '🎓',
-                description: 'AI Learning Platform',
-                lead: 'dallas',
-                color: '#3498db',
-                progress: 72,
-                agents: ['dallas', 'coder', 'writer', 'geek'],
-                tasks: {
-                    dallas: { task: 'Feature planning for v2.0', progress: 65 },
-                    coder: { task: 'AI Playground integration', progress: 40 },
-                    writer: { task: 'Course documentation', progress: 85 },
-                    geek: { task: '3D card animations', progress: 90 }
-                }
-            },
-            {
-                id: 'netagents',
-                name: 'NetAgents',
-                emoji: '🌐',
-                description: 'Multi-Agent Workspace',
-                lead: 'seattle',
-                color: '#2ecc71',
-                progress: 58,
-                agents: ['seattle', 'engineer', 'datascientist', 'researcher'],
-                tasks: {
-                    seattle: { task: 'PIN recovery system', progress: 100 },
-                    engineer: { task: 'WebSocket optimization', progress: 45 },
-                    datascientist: { task: 'RAG pipeline tuning', progress: 30 },
-                    researcher: { task: 'Agent architecture docs', progress: 60 }
-                }
-            },
-            {
-                id: 'pharmacrm',
-                name: 'PharmaCRM',
-                emoji: '💊',
-                description: 'Healthcare CRM Platform',
-                lead: 'houston',
-                color: '#e74c3c',
-                progress: 35,
-                agents: ['houston', 'analyst', 'financial', 'lawyer'],
-                tasks: {
-                    houston: { task: 'Dashboard wireframes', progress: 55 },
-                    analyst: { task: 'Data model design', progress: 40 },
-                    financial: { task: 'Pricing tier analysis', progress: 25 },
-                    lawyer: { task: 'HIPAA compliance review', progress: 20 }
-                }
-            }
-        ];
-        
-        const taskTemplates = {
-            main: ['Processing user request', 'Orchestrating workflow', 'Dispatching agents', 'Generating response'],
-            dallas: ['Code review for iProgramAI', 'Running tests', 'Updating project docs', 'Feature planning'],
-            seattle: ['Debugging NetAgents server', 'UI component update', 'API optimization', 'Theme customization'],
-            houston: ['CRM data migration', 'Compliance review', 'Analytics dashboard', 'Report generation'],
-            coder: ['Writing unit tests', 'Refactoring module', 'Bug fix #142', 'API integration', 'Code cleanup'],
-            engineer: ['System design review', 'Performance audit', 'Architecture planning', 'Infrastructure setup'],
-            researcher: ['Web research', 'Competitive analysis', 'Documentation review', 'API exploration'],
-            writer: ['README update', 'API documentation', 'User guide draft', 'Changelog entry'],
-            analyst: ['Data analysis', 'Metrics dashboard', 'Trend report', 'KPI review'],
-            datascientist: ['Model training', 'Feature engineering', 'Data pipeline', 'Prediction analysis'],
-            scientist: ['Research synthesis', 'Hypothesis testing', 'Literature review'],
-            financial: ['Budget analysis', 'Cost projection', 'Invoice processing'],
-            lawyer: ['Contract review', 'Compliance check', 'Policy update'],
-            geek: ['UI redesign', 'Theme implementation', 'Component styling', 'Animation effects'],
-            megaman: ['Complex task processing', 'Multi-step automation', 'System integration'],
-            flash: ['Quick lookup', 'Rapid response', 'Fast validation'],
-            ihelp: ['Quick answer', 'Simple lookup', 'Basic help']
-        };
-        
-        let agentStates = {};
-        let activityLog = [];
-        let tasksToday = 0;
-        
-        // Initialize agent states
-        agents.forEach(agent => {
-            agentStates[agent.id] = {
-                status: 'idle',
-                task: null,
-                project: null,
-                progress: 0,
-                startTime: null
-            };
-        });
-        
-        // MAGNAM is always active
-        agentStates['main'].status = 'working';
-        agentStates['main'].task = 'Monitoring all agents';
-        
-        // Initialize project agents as working
-        projects.forEach(project => {
-            project.agents.forEach(agentId => {
-                if (project.tasks[agentId]) {
-                    agentStates[agentId].status = 'working';
-                    agentStates[agentId].task = project.tasks[agentId].task;
-                    agentStates[agentId].project = project.id;
-                    agentStates[agentId].progress = project.tasks[agentId].progress;
-                }
+        // Tab switching
+        document.querySelectorAll('.nav-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Remove active from all tabs
+                document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                
+                // Add active to clicked tab
+                tab.classList.add('active');
+                document.getElementById(tab.dataset.tab).classList.add('active');
             });
         });
-        
-        function getAgentById(id) {
-            return agents.find(a => a.id === id);
-        }
-        
-        function getRandomTask(agentId) {
-            const tasks = taskTemplates[agentId] || taskTemplates['coder'];
-            return tasks[Math.floor(Math.random() * tasks.length)];
-        }
-        
-        function timeAgo(date) {
-            const seconds = Math.floor((Date.now() - date) / 1000);
-            if (seconds < 60) return 'Just now';
-            if (seconds < 3600) return `${Math.floor(seconds / 60)}m ago`;
-            return `${Math.floor(seconds / 3600)}h ago`;
-        }
-        
-        function getProgressClass(progress) {
-            if (progress >= 70) return 'high';
-            if (progress >= 40) return 'medium';
-            return 'low';
-        }
-        
-        function simulateActivity() {
-            // Slowly progress tasks
-            projects.forEach(project => {
-                project.agents.forEach(agentId => {
-                    if (project.tasks[agentId]) {
-                        const task = project.tasks[agentId];
-                        if (task.progress < 100) {
-                            task.progress += Math.random() * 2;
-                            if (task.progress > 100) task.progress = 100;
-                            agentStates[agentId].progress = task.progress;
-                        }
-                    }
-                });
-                
-                // Update project progress based on task averages
-                const taskProgresses = project.agents
-                    .filter(a => project.tasks[a])
-                    .map(a => project.tasks[a].progress);
-                project.progress = Math.round(taskProgresses.reduce((a, b) => a + b, 0) / taskProgresses.length);
-            });
-            
-            // Random activity for other agents
-            agents.forEach(agent => {
-                if (agent.id === 'main') return;
-                if (projects.some(p => p.agents.includes(agent.id))) return; // Skip project agents
-                
-                const state = agentStates[agent.id];
-                const rand = Math.random();
-                
-                if (state.status === 'idle' && rand < 0.05) {
-                    state.status = 'working';
-                    state.task = getRandomTask(agent.id);
-                    state.progress = 0;
-                    state.startTime = Date.now();
-                    tasksToday++;
-                    
-                    activityLog.unshift({
-                        agent,
-                        task: state.task,
-                        project: null,
-                        status: 'working',
-                        time: Date.now()
-                    });
-                } else if (state.status === 'working' && !projects.some(p => p.agents.includes(agent.id))) {
-                    state.progress += Math.random() * 15;
-                    if (state.progress >= 100) {
-                        activityLog.unshift({
-                            agent,
-                            task: state.task,
-                            project: state.project,
-                            status: 'completed',
-                            time: Date.now()
-                        });
-                        
-                        state.status = 'idle';
-                        state.task = null;
-                        state.project = null;
-                        state.progress = 0;
-                    }
-                }
-            });
-            
-            activityLog = activityLog.slice(0, 20);
-        }
-        
-        function renderSidebar() {
-            const list = document.getElementById('agent-list');
-            list.innerHTML = agents.map(agent => {
-                const state = agentStates[agent.id];
-                return `
-                    <div class="agent-item ${state.status}">
-                        <div class="agent-avatar">${agent.emoji}</div>
-                        <div class="agent-info">
-                            <div class="agent-name">
-                                ${agent.name}
-                                <span class="agent-status-dot ${state.status}"></span>
-                            </div>
-                            <div class="agent-role">${state.task || agent.role}</div>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-        }
-        
-        let activeProjectId = 'iprogramai';
-        
-        function selectProject(projectId) {
-            activeProjectId = projectId;
-            renderProjectTabs();
-            renderProjectDetail();
-        }
-        
-        function renderProjectTabs() {
-            const container = document.getElementById('project-tabs');
-            container.innerHTML = projects.map(project => `
-                <div class="project-tab ${project.id === activeProjectId ? 'active' : ''}" onclick="selectProject('${project.id}')">
-                    <div class="project-tab-icon ${project.id}">${project.emoji}</div>
-                    <div class="project-tab-info">
-                        <div class="project-tab-name">${project.name}</div>
-                        <div class="project-tab-progress">${Math.round(project.progress)}% complete</div>
-                    </div>
-                </div>
-            `).join('');
-        }
-        
-        function renderProjectDetail() {
-            const container = document.getElementById('project-detail');
-            const project = projects.find(p => p.id === activeProjectId);
-            const lead = getAgentById(project.lead);
-            const activeAgentsCount = project.agents.filter(a => agentStates[a].status === 'working').length;
-            
-            container.innerHTML = `
-                <div class="project-detail-header">
-                    <div class="project-detail-title-area">
-                        <div class="project-detail-icon ${project.id}">${project.emoji}</div>
-                        <div>
-                            <div class="project-detail-name">${project.name}</div>
-                            <div class="project-detail-desc">${project.description} • Lead: ${lead.emoji} ${lead.name}</div>
-                        </div>
-                    </div>
-                    <div class="project-detail-stats">
-                        <div class="project-stat">
-                            <div class="project-stat-value">${project.agents.length}</div>
-                            <div class="project-stat-label">Agents</div>
-                        </div>
-                        <div class="project-stat">
-                            <div class="project-stat-value">${activeAgentsCount}</div>
-                            <div class="project-stat-label">Active</div>
-                        </div>
-                        <div class="project-stat">
-                            <div class="project-stat-value" style="color: var(--green)">${Math.round(project.progress)}%</div>
-                            <div class="project-stat-label">Progress</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="project-overall-progress">
-                    <div class="project-overall-label">
-                        <span>Overall Progress</span>
-                        <span>${Math.round(project.progress)}%</span>
-                    </div>
-                    <div class="project-overall-bar">
-                        <div class="project-overall-fill ${project.id}" style="width: ${project.progress}%"></div>
-                    </div>
-                </div>
-                
-                <div class="project-agents-grid">
-                    ${project.agents.map(agentId => {
-                        const agent = getAgentById(agentId);
-                        const task = project.tasks[agentId];
-                        const state = agentStates[agentId];
-                        const isLead = agentId === project.lead;
-                        return `
-                            <div class="project-agent-card">
-                                <div class="project-agent-card-header">
-                                    <div class="project-agent-card-avatar">${agent.emoji}</div>
-                                    <div>
-                                        <div class="project-agent-card-name">
-                                            ${agent.name}
-                                            ${isLead ? '<span style="color: var(--yellow)">★</span>' : ''}
-                                            <span class="agent-status-dot ${state.status}"></span>
-                                        </div>
-                                        <div class="project-agent-card-role">${agent.role}</div>
-                                    </div>
-                                </div>
-                                <div class="project-agent-card-task">
-                                    📋 ${task ? task.task : 'No active task'}
-                                </div>
-                                <div class="project-agent-card-progress">
-                                    <div class="project-agent-card-bar">
-                                        <div class="project-agent-card-fill" style="width: ${task ? task.progress : 0}%"></div>
-                                    </div>
-                                    <div class="project-agent-card-percent">${task ? Math.round(task.progress) : 0}%</div>
-                                </div>
-                            </div>
-                        `;
-                    }).join('')}
-                </div>
-            `;
-        }
-        
-        function renderProjects() {
-            renderProjectTabs();
-            renderProjectDetail();
-        }
-        
-        function renderActiveTasks() {
-            const container = document.getElementById('active-tasks');
-            const activeAgents = agents.filter(a => 
-                agentStates[a.id].status === 'working' && 
-                !projects.some(p => p.agents.includes(a.id))
-            );
-            
-            // Add MAGNAM
-            const magnam = agents.find(a => a.id === 'main');
-            if (!activeAgents.includes(magnam)) {
-                activeAgents.unshift(magnam);
-            }
-            
-            if (activeAgents.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <div class="empty-state-icon">😴</div>
-                        <div>All agents are idle</div>
-                    </div>
-                `;
-                return;
-            }
-            
-            container.innerHTML = activeAgents.map(agent => {
-                const state = agentStates[agent.id];
-                return `
-                    <div class="task-card active">
-                        <div class="task-header">
-                            <span class="task-avatar">${agent.emoji}</span>
-                            <div>
-                                <div class="task-agent-name">${agent.name}</div>
-                                <div class="task-agent-role">${agent.role}</div>
-                            </div>
-                            <span class="task-status-badge working">Working</span>
-                        </div>
-                        <div class="task-description">${state.task}</div>
-                        <div class="task-meta">
-                            ${state.project ? `
-                                <div class="task-project">
-                                    <span class="task-project-dot ${state.project}"></span>
-                                    <span>${state.project.toUpperCase()}</span>
-                                </div>
-                            ` : '<span></span>'}
-                            <span>${state.startTime ? timeAgo(state.startTime) : ''}</span>
-                        </div>
-                        ${agent.id !== 'main' ? `
-                            <div class="progress-bar">
-                                <div class="progress-fill" style="width: ${Math.min(state.progress, 100)}%"></div>
-                            </div>
-                        ` : ''}
-                    </div>
-                `;
-            }).join('');
-        }
-        
-        function renderActivityFeed() {
-            const feed = document.getElementById('activity-feed');
-            
-            if (activityLog.length === 0) {
-                feed.innerHTML = `
-                    <div class="empty-state">
-                        <div class="empty-state-icon">📭</div>
-                        <div>No recent activity</div>
-                    </div>
-                `;
-                return;
-            }
-            
-            feed.innerHTML = activityLog.slice(0, 10).map(item => `
-                <div class="activity-item">
-                    <div class="activity-avatar">${item.agent.emoji}</div>
-                    <div class="activity-content">
-                        <div class="activity-header">
-                            <span class="activity-agent">${item.agent.name}</span>
-                            <span class="activity-time">${timeAgo(item.time)}</span>
-                        </div>
-                        <div class="activity-task">${item.task}</div>
-                        <span class="activity-status ${item.status}">
-                            ${item.status === 'working' ? '🔄 Working' : '✅ Completed'}
-                        </span>
-                    </div>
-                </div>
-            `).join('');
-        }
-        
-        function updateStats() {
-            const activeCount = agents.filter(a => agentStates[a.id].status === 'working').length;
-            document.getElementById('active-count').textContent = activeCount;
-            document.getElementById('tasks-count').textContent = tasksToday;
-            document.getElementById('last-update').textContent = new Date().toLocaleTimeString();
-        }
-        
-        function render() {
-            simulateActivity();
-            renderSidebar();
-            renderProjects();
-            renderActiveTasks();
-            renderActivityFeed();
-            updateStats();
-        }
-        
-        // Initial render
-        render();
-        
-        // Update every 2 seconds
-        setInterval(render, 2000);
     </script>
 </body>
 </html>
