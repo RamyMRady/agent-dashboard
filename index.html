@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MAGNAM - Agent Control Center</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --bg-dark: #0d1117;
+            --bg-card: #161b22;
+            --bg-hover: #21262d;
+            --border: #30363d;
+            --text: #c9d1d9;
+            --text-muted: #8b949e;
+            --accent: #f0883e;
+            --green: #3fb950;
+            --blue: #58a6ff;
+            --purple: #a371f7;
+            --red: #f85149;
+            --yellow: #d29922;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text);
+            min-height: 100vh;
+        }
+        
+        /* Header */
+        .header {
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border);
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo-icon {
+            font-size: 28px;
+        }
+        
+        .header-stats {
+            display: flex;
+            gap: 24px;
+        }
+        
+        .header-stat {
+            text-align: center;
+        }
+        
+        .header-stat-value {
+            font-size: 20px;
+            font-weight: 600;
+        }
+        
+        .header-stat-label {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+        
+        .status-live {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: var(--green);
+        }
+        
+        .pulse {
+            width: 8px;
+            height: 8px;
+            background: var(--green);
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+        
+        /* Main Layout */
+        .main {
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            min-height: calc(100vh - 65px);
+        }
+        
+        /* Sidebar - Agent List */
+        .sidebar {
+            background: var(--bg-card);
+            border-right: 1px solid var(--border);
+            overflow-y: auto;
+        }
+        
+        .sidebar-header {
+            padding: 16px;
+            border-bottom: 1px solid var(--border);
+            font-weight: 600;
+            color: var(--text-muted);
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .agent-list {
+            padding: 8px;
+        }
+        
+        .agent-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-bottom: 4px;
+        }
+        
+        .agent-item:hover {
+            background: var(--bg-hover);
+        }
+        
+        .agent-item.active {
+            background: var(--bg-hover);
+            border: 1px solid var(--border);
+        }
+        
+        .agent-item.working {
+            border-left: 3px solid var(--green);
+        }
+        
+        .agent-item.busy {
+            border-left: 3px solid var(--yellow);
+        }
+        
+        .agent-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            background: var(--bg-dark);
+        }
+        
+        .agent-info {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .agent-name {
+            font-weight: 600;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .agent-role {
+            font-size: 12px;
+            color: var(--text-muted);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .agent-status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        
+        .agent-status-dot.idle { background: var(--text-muted); }
+        .agent-status-dot.working { background: var(--green); animation: pulse 2s infinite; }
+        .agent-status-dot.busy { background: var(--yellow); animation: pulse 1s infinite; }
+        
+        /* Content Area */
+        .content {
+            padding: 24px;
+            overflow-y: auto;
+        }
+        
+        .section {
+            margin-bottom: 32px;
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
+        /* Activity Feed */
+        .activity-feed {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        
+        .activity-item {
+            padding: 16px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            gap: 12px;
+        }
+        
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+        
+        .activity-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            background: var(--bg-dark);
+            flex-shrink: 0;
+        }
+        
+        .activity-content {
+            flex: 1;
+        }
+        
+        .activity-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 4px;
+        }
+        
+        .activity-agent {
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        .activity-time {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+        
+        .activity-task {
+            font-size: 14px;
+            color: var(--text);
+            margin-bottom: 8px;
+        }
+        
+        .activity-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .activity-status.working {
+            background: rgba(63, 185, 80, 0.15);
+            color: var(--green);
+        }
+        
+        .activity-status.completed {
+            background: rgba(88, 166, 255, 0.15);
+            color: var(--blue);
+        }
+        
+        .activity-status.busy {
+            background: rgba(210, 153, 34, 0.15);
+            color: var(--yellow);
+        }
+        
+        /* Task Cards */
+        .task-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 16px;
+        }
+        
+        .task-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.2s;
+        }
+        
+        .task-card:hover {
+            border-color: var(--accent);
+        }
+        
+        .task-card.active {
+            border-color: var(--green);
+            box-shadow: 0 0 0 1px var(--green);
+        }
+        
+        .task-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        
+        .task-avatar {
+            font-size: 28px;
+        }
+        
+        .task-agent-name {
+            font-weight: 600;
+            font-size: 16px;
+        }
+        
+        .task-agent-role {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+        
+        .task-status-badge {
+            margin-left: auto;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .task-status-badge.idle {
+            background: var(--bg-hover);
+            color: var(--text-muted);
+        }
+        
+        .task-status-badge.working {
+            background: rgba(63, 185, 80, 0.2);
+            color: var(--green);
+        }
+        
+        .task-status-badge.busy {
+            background: rgba(210, 153, 34, 0.2);
+            color: var(--yellow);
+        }
+        
+        .task-description {
+            font-size: 14px;
+            color: var(--text);
+            margin-bottom: 12px;
+            min-height: 40px;
+        }
+        
+        .task-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+        
+        .task-project {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .task-project-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+        
+        .task-project-dot.dallas { background: #3498db; }
+        .task-project-dot.seattle { background: #2ecc71; }
+        .task-project-dot.houston { background: #e74c3c; }
+        
+        /* Progress Bar */
+        .progress-bar {
+            height: 4px;
+            background: var(--bg-dark);
+            border-radius: 2px;
+            margin-top: 12px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: var(--green);
+            border-radius: 2px;
+            transition: width 0.5s ease;
+        }
+        
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 48px;
+            color: var(--text-muted);
+        }
+        
+        .empty-state-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+        
+        @media (max-width: 900px) {
+            .main {
+                grid-template-columns: 1fr;
+            }
+            .sidebar {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-left">
+            <div class="logo">
+                <span class="logo-icon">⚡</span>
+                <span>MAGNAM</span>
+            </div>
+        </div>
+        <div class="header-stats">
+            <div class="header-stat">
+                <div class="header-stat-value" id="active-count">0</div>
+                <div class="header-stat-label">Active</div>
+            </div>
+            <div class="header-stat">
+                <div class="header-stat-value" id="total-count">17</div>
+                <div class="header-stat-label">Agents</div>
+            </div>
+            <div class="header-stat">
+                <div class="header-stat-value" id="tasks-count">0</div>
+                <div class="header-stat-label">Tasks Today</div>
+            </div>
+        </div>
+        <div class="status-live">
+            <div class="pulse"></div>
+            <span id="last-update">Live</span>
+        </div>
+    </header>
+    
+    <main class="main">
+        <aside class="sidebar">
+            <div class="sidebar-header">All Agents</div>
+            <div class="agent-list" id="agent-list"></div>
+        </aside>
+        
+        <div class="content">
+            <div class="section">
+                <div class="section-header">
+                    <h2 class="section-title">🔴 Currently Working</h2>
+                </div>
+                <div class="task-grid" id="active-tasks"></div>
+            </div>
+            
+            <div class="section">
+                <div class="section-header">
+                    <h2 class="section-title">📋 Recent Activity</h2>
+                </div>
+                <div class="activity-feed" id="activity-feed"></div>
+            </div>
+        </div>
+    </main>
+    
+    <script>
+        // Agent definitions with simulated real-time status
+        const agents = [
+            { id: 'main', name: 'MAGNAM', emoji: '⚡', role: 'Orchestrator', model: 'Opus', type: 'orchestrator' },
+            { id: 'dallas', name: 'DALLAS', emoji: '🏙️', role: 'iProgramAI', model: 'Sonnet', type: 'project' },
+            { id: 'seattle', name: 'SEATTLE', emoji: '🌲', role: 'NetAgents', model: 'Sonnet', type: 'project' },
+            { id: 'houston', name: 'HOUSTON', emoji: '🚀', role: 'PharmaCRM', model: 'Sonnet', type: 'project' },
+            { id: 'coder', name: 'CODER', emoji: '💻', role: 'Development', model: 'Sonnet', type: 'specialist' },
+            { id: 'engineer', name: 'ENGINEER', emoji: '🔧', role: 'Architecture', model: 'Sonnet', type: 'specialist' },
+            { id: 'researcher', name: 'RESEARCHER', emoji: '🔬', role: 'Research', model: 'Sonnet', type: 'specialist' },
+            { id: 'writer', name: 'WRITER', emoji: '✍️', role: 'Documentation', model: 'Sonnet', type: 'specialist' },
+            { id: 'analyst', name: 'ANALYST', emoji: '📊', role: 'Analysis', model: 'Sonnet', type: 'specialist' },
+            { id: 'datascientist', name: 'DATASCIENTIST', emoji: '🤖', role: 'ML/Data', model: 'Sonnet', type: 'specialist' },
+            { id: 'scientist', name: 'SCIENTIST', emoji: '🧪', role: 'Science', model: 'Sonnet', type: 'specialist' },
+            { id: 'financial', name: 'FINANCIAL', emoji: '💰', role: 'Finance', model: 'Sonnet', type: 'specialist' },
+            { id: 'lawyer', name: 'LAWYER', emoji: '⚖️', role: 'Legal', model: 'Sonnet', type: 'specialist' },
+            { id: 'geek', name: 'GEEK', emoji: '🎮', role: 'Tech/UI', model: 'Sonnet', type: 'specialist' },
+            { id: 'megaman', name: 'MEGAMAN', emoji: '💪', role: 'Power Tasks', model: 'Sonnet', type: 'specialist' },
+            { id: 'flash', name: 'FLASH', emoji: '⚡', role: 'Speed Tasks', model: 'Sonnet', type: 'specialist' },
+            { id: 'ihelp', name: 'IHELP', emoji: '❓', role: 'Quick Help', model: 'Haiku', type: 'helper' }
+        ];
+        
+        const taskTemplates = {
+            main: ['Processing user request', 'Orchestrating workflow', 'Dispatching agents', 'Generating response'],
+            dallas: ['Code review for iProgramAI', 'Running tests', 'Updating project docs', 'Feature planning'],
+            seattle: ['Debugging NetAgents server', 'UI component update', 'API optimization', 'Theme customization'],
+            houston: ['CRM data migration', 'Compliance review', 'Analytics dashboard', 'Report generation'],
+            coder: ['Writing unit tests', 'Refactoring module', 'Bug fix #142', 'API integration', 'Code cleanup'],
+            engineer: ['System design review', 'Performance audit', 'Architecture planning', 'Infrastructure setup'],
+            researcher: ['Web research', 'Competitive analysis', 'Documentation review', 'API exploration'],
+            writer: ['README update', 'API documentation', 'User guide draft', 'Changelog entry'],
+            analyst: ['Data analysis', 'Metrics dashboard', 'Trend report', 'KPI review'],
+            datascientist: ['Model training', 'Feature engineering', 'Data pipeline', 'Prediction analysis'],
+            scientist: ['Research synthesis', 'Hypothesis testing', 'Literature review'],
+            financial: ['Budget analysis', 'Cost projection', 'Invoice processing'],
+            lawyer: ['Contract review', 'Compliance check', 'Policy update'],
+            geek: ['UI redesign', 'Theme implementation', 'Component styling', 'Animation effects'],
+            megaman: ['Complex task processing', 'Multi-step automation', 'System integration'],
+            flash: ['Quick lookup', 'Rapid response', 'Fast validation'],
+            ihelp: ['Quick answer', 'Simple lookup', 'Basic help']
+        };
+        
+        const projects = ['dallas', 'seattle', 'houston'];
+        
+        let agentStates = {};
+        let activityLog = [];
+        let tasksToday = 0;
+        
+        // Initialize agent states
+        agents.forEach(agent => {
+            agentStates[agent.id] = {
+                status: 'idle',
+                task: null,
+                project: null,
+                progress: 0,
+                startTime: null
+            };
+        });
+        
+        // MAGNAM is always active
+        agentStates['main'].status = 'working';
+        agentStates['main'].task = 'Monitoring all agents';
+        
+        function getRandomTask(agentId) {
+            const tasks = taskTemplates[agentId] || taskTemplates['coder'];
+            return tasks[Math.floor(Math.random() * tasks.length)];
+        }
+        
+        function getRandomProject() {
+            return projects[Math.floor(Math.random() * projects.length)];
+        }
+        
+        function timeAgo(date) {
+            const seconds = Math.floor((Date.now() - date) / 1000);
+            if (seconds < 60) return 'Just now';
+            if (seconds < 3600) return `${Math.floor(seconds / 60)}m ago`;
+            return `${Math.floor(seconds / 3600)}h ago`;
+        }
+        
+        function simulateActivity() {
+            // Randomly change agent states
+            agents.forEach(agent => {
+                if (agent.id === 'main') return; // MAGNAM always working
+                
+                const state = agentStates[agent.id];
+                const rand = Math.random();
+                
+                if (state.status === 'idle' && rand < 0.1) {
+                    // Start working
+                    state.status = 'working';
+                    state.task = getRandomTask(agent.id);
+                    state.project = getRandomProject();
+                    state.progress = 0;
+                    state.startTime = Date.now();
+                    tasksToday++;
+                    
+                    activityLog.unshift({
+                        agent,
+                        task: state.task,
+                        project: state.project,
+                        status: 'working',
+                        time: Date.now()
+                    });
+                } else if (state.status === 'working') {
+                    state.progress += Math.random() * 20;
+                    if (state.progress >= 100) {
+                        // Complete task
+                        activityLog.unshift({
+                            agent,
+                            task: state.task,
+                            project: state.project,
+                            status: 'completed',
+                            time: Date.now()
+                        });
+                        
+                        state.status = 'idle';
+                        state.task = null;
+                        state.project = null;
+                        state.progress = 0;
+                    }
+                }
+            });
+            
+            // Keep activity log trimmed
+            activityLog = activityLog.slice(0, 20);
+        }
+        
+        function renderSidebar() {
+            const list = document.getElementById('agent-list');
+            list.innerHTML = agents.map(agent => {
+                const state = agentStates[agent.id];
+                return `
+                    <div class="agent-item ${state.status}">
+                        <div class="agent-avatar">${agent.emoji}</div>
+                        <div class="agent-info">
+                            <div class="agent-name">
+                                ${agent.name}
+                                <span class="agent-status-dot ${state.status}"></span>
+                            </div>
+                            <div class="agent-role">${state.task || agent.role}</div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        function renderActiveTasks() {
+            const container = document.getElementById('active-tasks');
+            const activeAgents = agents.filter(a => agentStates[a.id].status === 'working');
+            
+            if (activeAgents.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">😴</div>
+                        <div>All agents are idle</div>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = activeAgents.map(agent => {
+                const state = agentStates[agent.id];
+                return `
+                    <div class="task-card active">
+                        <div class="task-header">
+                            <span class="task-avatar">${agent.emoji}</span>
+                            <div>
+                                <div class="task-agent-name">${agent.name}</div>
+                                <div class="task-agent-role">${agent.role}</div>
+                            </div>
+                            <span class="task-status-badge working">Working</span>
+                        </div>
+                        <div class="task-description">${state.task}</div>
+                        <div class="task-meta">
+                            ${state.project ? `
+                                <div class="task-project">
+                                    <span class="task-project-dot ${state.project}"></span>
+                                    <span>${state.project.toUpperCase()}</span>
+                                </div>
+                            ` : '<span></span>'}
+                            <span>${state.startTime ? timeAgo(state.startTime) : ''}</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: ${Math.min(state.progress, 100)}%"></div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        function renderActivityFeed() {
+            const feed = document.getElementById('activity-feed');
+            
+            if (activityLog.length === 0) {
+                feed.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📭</div>
+                        <div>No recent activity</div>
+                    </div>
+                `;
+                return;
+            }
+            
+            feed.innerHTML = activityLog.slice(0, 10).map(item => `
+                <div class="activity-item">
+                    <div class="activity-avatar">${item.agent.emoji}</div>
+                    <div class="activity-content">
+                        <div class="activity-header">
+                            <span class="activity-agent">${item.agent.name}</span>
+                            <span class="activity-time">${timeAgo(item.time)}</span>
+                        </div>
+                        <div class="activity-task">${item.task}</div>
+                        <span class="activity-status ${item.status}">
+                            ${item.status === 'working' ? '🔄 Working' : '✅ Completed'}
+                        </span>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function updateStats() {
+            const activeCount = agents.filter(a => agentStates[a.id].status === 'working').length;
+            document.getElementById('active-count').textContent = activeCount;
+            document.getElementById('tasks-count').textContent = tasksToday;
+            document.getElementById('last-update').textContent = new Date().toLocaleTimeString();
+        }
+        
+        function render() {
+            simulateActivity();
+            renderSidebar();
+            renderActiveTasks();
+            renderActivityFeed();
+            updateStats();
+        }
+        
+        // Initial render
+        render();
+        
+        // Update every 2 seconds
+        setInterval(render, 2000);
+    </script>
+</body>
+</html>
