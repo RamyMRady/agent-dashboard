@@ -222,7 +222,261 @@
             font-weight: 600;
         }
         
-        /* Project Cards */
+        /* Project Tabs */
+        .project-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 12px;
+        }
+        
+        .project-tab {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 20px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+        
+        .project-tab:hover {
+            background: var(--bg-hover);
+            border-color: var(--text-muted);
+        }
+        
+        .project-tab.active {
+            border-color: var(--accent);
+            background: var(--bg-hover);
+        }
+        
+        .project-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -13px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 3px;
+            background: var(--accent);
+            border-radius: 2px;
+        }
+        
+        .project-tab-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+        
+        .project-tab-icon.iprogramai { background: linear-gradient(135deg, #3498db, #2980b9); }
+        .project-tab-icon.netagents { background: linear-gradient(135deg, #2ecc71, #27ae60); }
+        .project-tab-icon.pharmacrm { background: linear-gradient(135deg, #e74c3c, #c0392b); }
+        
+        .project-tab-info {
+            text-align: left;
+        }
+        
+        .project-tab-name {
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        .project-tab-progress {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+        
+        /* Project Detail */
+        .project-detail {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
+        }
+        
+        .project-detail-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .project-detail-title-area {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        
+        .project-detail-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+        }
+        
+        .project-detail-icon.iprogramai { background: linear-gradient(135deg, #3498db, #2980b9); }
+        .project-detail-icon.netagents { background: linear-gradient(135deg, #2ecc71, #27ae60); }
+        .project-detail-icon.pharmacrm { background: linear-gradient(135deg, #e74c3c, #c0392b); }
+        
+        .project-detail-name {
+            font-size: 24px;
+            font-weight: 700;
+        }
+        
+        .project-detail-desc {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+        
+        .project-detail-stats {
+            display: flex;
+            gap: 24px;
+        }
+        
+        .project-stat {
+            text-align: center;
+        }
+        
+        .project-stat-value {
+            font-size: 24px;
+            font-weight: 700;
+        }
+        
+        .project-stat-label {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+        
+        .project-overall-progress {
+            margin-bottom: 24px;
+        }
+        
+        .project-overall-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 13px;
+        }
+        
+        .project-overall-bar {
+            height: 12px;
+            background: var(--bg-dark);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        
+        .project-overall-fill {
+            height: 100%;
+            border-radius: 6px;
+            transition: width 0.5s ease;
+        }
+        
+        .project-overall-fill.iprogramai { background: linear-gradient(90deg, #3498db, #56d4dd); }
+        .project-overall-fill.netagents { background: linear-gradient(90deg, #2ecc71, #58d68d); }
+        .project-overall-fill.pharmacrm { background: linear-gradient(90deg, #e74c3c, #f1948a); }
+        
+        .project-agents-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 16px;
+        }
+        
+        .project-agent-card {
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px;
+            transition: all 0.2s;
+        }
+        
+        .project-agent-card:hover {
+            border-color: var(--accent);
+        }
+        
+        .project-agent-card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        
+        .project-agent-card-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            background: var(--bg-hover);
+        }
+        
+        .project-agent-card-name {
+            font-weight: 600;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .project-agent-card-role {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+        
+        .project-agent-card-task {
+            font-size: 13px;
+            color: var(--text);
+            margin-bottom: 12px;
+            padding: 10px;
+            background: var(--bg-hover);
+            border-radius: 8px;
+        }
+        
+        .project-agent-card-progress {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .project-agent-card-bar {
+            flex: 1;
+            height: 6px;
+            background: var(--bg-hover);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        
+        .project-agent-card-fill {
+            height: 100%;
+            background: var(--green);
+            border-radius: 3px;
+            transition: width 0.3s;
+        }
+        
+        .project-agent-card-percent {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--green);
+            min-width: 45px;
+            text-align: right;
+        }
+        
+        /* Project Cards (grid view - keeping for reference) */
         .project-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
@@ -658,7 +912,8 @@
                 <div class="section-header">
                     <h2 class="section-title">📁 Projects</h2>
                 </div>
-                <div class="project-grid" id="project-grid"></div>
+                <div class="project-tabs" id="project-tabs"></div>
+                <div class="project-detail" id="project-detail"></div>
             </div>
             
             <div class="section">
@@ -908,56 +1163,106 @@
             }).join('');
         }
         
-        function renderProjects() {
-            const container = document.getElementById('project-grid');
-            container.innerHTML = projects.map(project => {
-                const lead = getAgentById(project.lead);
-                return `
-                    <div class="project-card">
-                        <div class="project-header">
-                            <div class="project-title-area">
-                                <div class="project-icon ${project.id}">${project.emoji}</div>
-                                <div>
-                                    <div class="project-name">${project.name}</div>
-                                    <div class="project-lead">Lead: ${lead.emoji} ${lead.name}</div>
-                                </div>
-                            </div>
-                            <div class="project-progress-badge ${getProgressClass(project.progress)}">${Math.round(project.progress)}%</div>
-                        </div>
-                        
-                        <div class="project-progress-bar">
-                            <div class="project-progress-fill ${project.id}" style="width: ${project.progress}%"></div>
-                        </div>
-                        
-                        <div class="project-agents-title">Team (${project.agents.length} agents)</div>
-                        <div class="project-agent-list">
-                            ${project.agents.map(agentId => {
-                                const agent = getAgentById(agentId);
-                                const task = project.tasks[agentId];
-                                const state = agentStates[agentId];
-                                return `
-                                    <div class="project-agent">
-                                        <div class="project-agent-avatar">${agent.emoji}</div>
-                                        <div class="project-agent-info">
-                                            <div class="project-agent-name">
-                                                ${agent.name}
-                                                <span class="agent-status-dot ${state.status}"></span>
-                                            </div>
-                                            <div class="project-agent-task">${task ? task.task : 'Idle'}</div>
-                                        </div>
-                                        <div class="project-agent-progress">
-                                            <div class="mini-progress">
-                                                <div class="mini-progress-fill" style="width: ${task ? task.progress : 0}%"></div>
-                                            </div>
-                                            <span class="progress-percent">${task ? Math.round(task.progress) : 0}%</span>
-                                        </div>
-                                    </div>
-                                `;
-                            }).join('')}
+        let activeProjectId = 'iprogramai';
+        
+        function selectProject(projectId) {
+            activeProjectId = projectId;
+            renderProjectTabs();
+            renderProjectDetail();
+        }
+        
+        function renderProjectTabs() {
+            const container = document.getElementById('project-tabs');
+            container.innerHTML = projects.map(project => `
+                <div class="project-tab ${project.id === activeProjectId ? 'active' : ''}" onclick="selectProject('${project.id}')">
+                    <div class="project-tab-icon ${project.id}">${project.emoji}</div>
+                    <div class="project-tab-info">
+                        <div class="project-tab-name">${project.name}</div>
+                        <div class="project-tab-progress">${Math.round(project.progress)}% complete</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function renderProjectDetail() {
+            const container = document.getElementById('project-detail');
+            const project = projects.find(p => p.id === activeProjectId);
+            const lead = getAgentById(project.lead);
+            const activeAgentsCount = project.agents.filter(a => agentStates[a].status === 'working').length;
+            
+            container.innerHTML = `
+                <div class="project-detail-header">
+                    <div class="project-detail-title-area">
+                        <div class="project-detail-icon ${project.id}">${project.emoji}</div>
+                        <div>
+                            <div class="project-detail-name">${project.name}</div>
+                            <div class="project-detail-desc">${project.description} • Lead: ${lead.emoji} ${lead.name}</div>
                         </div>
                     </div>
-                `;
-            }).join('');
+                    <div class="project-detail-stats">
+                        <div class="project-stat">
+                            <div class="project-stat-value">${project.agents.length}</div>
+                            <div class="project-stat-label">Agents</div>
+                        </div>
+                        <div class="project-stat">
+                            <div class="project-stat-value">${activeAgentsCount}</div>
+                            <div class="project-stat-label">Active</div>
+                        </div>
+                        <div class="project-stat">
+                            <div class="project-stat-value" style="color: var(--green)">${Math.round(project.progress)}%</div>
+                            <div class="project-stat-label">Progress</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="project-overall-progress">
+                    <div class="project-overall-label">
+                        <span>Overall Progress</span>
+                        <span>${Math.round(project.progress)}%</span>
+                    </div>
+                    <div class="project-overall-bar">
+                        <div class="project-overall-fill ${project.id}" style="width: ${project.progress}%"></div>
+                    </div>
+                </div>
+                
+                <div class="project-agents-grid">
+                    ${project.agents.map(agentId => {
+                        const agent = getAgentById(agentId);
+                        const task = project.tasks[agentId];
+                        const state = agentStates[agentId];
+                        const isLead = agentId === project.lead;
+                        return `
+                            <div class="project-agent-card">
+                                <div class="project-agent-card-header">
+                                    <div class="project-agent-card-avatar">${agent.emoji}</div>
+                                    <div>
+                                        <div class="project-agent-card-name">
+                                            ${agent.name}
+                                            ${isLead ? '<span style="color: var(--yellow)">★</span>' : ''}
+                                            <span class="agent-status-dot ${state.status}"></span>
+                                        </div>
+                                        <div class="project-agent-card-role">${agent.role}</div>
+                                    </div>
+                                </div>
+                                <div class="project-agent-card-task">
+                                    📋 ${task ? task.task : 'No active task'}
+                                </div>
+                                <div class="project-agent-card-progress">
+                                    <div class="project-agent-card-bar">
+                                        <div class="project-agent-card-fill" style="width: ${task ? task.progress : 0}%"></div>
+                                    </div>
+                                    <div class="project-agent-card-percent">${task ? Math.round(task.progress) : 0}%</div>
+                                </div>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+            `;
+        }
+        
+        function renderProjects() {
+            renderProjectTabs();
+            renderProjectDetail();
         }
         
         function renderActiveTasks() {
